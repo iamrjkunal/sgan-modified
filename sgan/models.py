@@ -157,6 +157,8 @@ class Decoder(nn.Module):
         pred_traj_fake_rel = []
         decoder_input = self.spatial_embedding(last_pos_rel)
         decoder_input = decoder_input.view(1, batch, self.embedding_dim)
+#         print(self.seq_len)
+#         exit()
 
         for _ in range(self.seq_len):
             output, state_tuple = self.decoder(decoder_input, state_tuple)
@@ -579,6 +581,8 @@ class TrajectoryDiscriminator(nn.Module):
         self.obs_len = obs_len
         self.pred_len = pred_len
         self.seq_len = obs_len + pred_len
+#         print(self.seq_len)
+#         exit()
         self.mlp_dim = mlp_dim
         self.h_dim = h_dim
         self.d_type = d_type
@@ -624,10 +628,16 @@ class TrajectoryDiscriminator(nn.Module):
         # trajectory and relative postion at the start when combined with
         # trajectory information should help in discriminative behavior.
         if self.d_type == 'local':
+#             print("1\n",final_h.size())
             classifier_input = final_h.squeeze()
+#             print("2\n",classifier_input.size())
+#             exit()
         else:
             classifier_input = self.pool_net(
                 final_h.squeeze(), seq_start_end, traj[0]
             )
         scores = self.real_classifier(classifier_input)
+#         print(scores)
+#         print(scores.size())
+#         exit()
         return scores
