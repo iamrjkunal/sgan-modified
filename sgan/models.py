@@ -75,7 +75,7 @@ class Encoder(nn.Module):
     def forward(self, obs_traj):
         """
         Inputs:
-        - obs_traj: Tensor of shape (obs_len, batch, 2) ############### why 2?
+        - obs_traj: Tensor of shape (obs_len, batch, 2)
         Output:
         - final_h: Tensor of shape (self.num_layers, batch, self.h_dim)
         """
@@ -86,6 +86,7 @@ class Encoder(nn.Module):
             -1, batch, self.embedding_dim
         )
         state_tuple = self.init_hidden(batch)
+        #outputs (the top-layer hidden state for each time-step), state = (hidden, cell) {the final hidden and cell state for each layer}
         output, state = self.encoder(obs_traj_embedding, state_tuple)
         final_h = state[0]
         return final_h
