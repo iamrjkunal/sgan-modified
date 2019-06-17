@@ -85,6 +85,8 @@ class Encoder(nn.Module):
         obs_traj_embedding = obs_traj_embedding.view(
             -1, batch, self.embedding_dim
         )
+#         print(obs_traj_embedding.size())
+#         exit()
         state_tuple = self.init_hidden(batch)
         #outputs (the top-layer hidden state for each time-step), state = (hidden, cell) {the final hidden and cell state for each layer}
         output, state = self.encoder(obs_traj_embedding, state_tuple)
