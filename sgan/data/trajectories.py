@@ -13,15 +13,16 @@ logger = logging.getLogger(__name__)
 def seq_collate(data):
     (obs_seq_list, pred_seq_list, obs_seq_rel_list, pred_seq_rel_list,
      non_linear_ped_list, loss_mask_list) = zip(*data)
-#     print(obs_seq_list)
-#     print(obs_seq_list.size())
+#     print(obs_seq_list[1])
+#     print(obs_seq_list[1].size())
 #     exit()
 
     _len = [len(seq) for seq in obs_seq_list]
     cum_start_idx = [0] + np.cumsum(_len).tolist()
     seq_start_end = [[start, end]
                      for start, end in zip(cum_start_idx, cum_start_idx[1:])]
-
+#     print(seq_start_end)
+#     exit()
     # Data format: batch, input_size, seq_len
     # LSTM input format: seq_len, batch, input_size
     obs_traj = torch.cat(obs_seq_list, dim=0).permute(2, 0, 1)
@@ -98,7 +99,8 @@ class TrajectoryDataset(Dataset):
         self.skip = skip
         self.seq_len = self.obs_len + self.pred_len
         self.delim = delim
-
+#         print(self.data_dir)
+#         exit()
         all_files = os.listdir(self.data_dir)
         all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
         num_peds_in_seq = []
@@ -107,14 +109,19 @@ class TrajectoryDataset(Dataset):
         loss_mask_list = []
         non_linear_ped = []
         for path in all_files:
+#             print(path)
+#             exit()
             data = read_file(path, delim)
             frames = np.unique(data[:, 0]).tolist()
             frame_data = []
             for frame in frames:
                 frame_data.append(data[frame == data[:, 0], :])
+#             print(len(frame_data))
+#             exit()
             num_sequences = int(
                 math.ceil((len(frames) - self.seq_len + 1) / skip))
-
+            print(num_sequences)
+            exit()
             for idx in range(0, num_sequences * self.skip + 1, skip):
                 curr_seq_data = np.concatenate(
                     frame_data[idx:idx + self.seq_len], axis=0)
