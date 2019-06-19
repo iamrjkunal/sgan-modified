@@ -120,8 +120,8 @@ class TrajectoryDataset(Dataset):
 #             exit()
             num_sequences = int(
                 math.ceil((len(frames) - self.seq_len + 1) / skip))
-            print(num_sequences)
-            exit()
+#             print(num_sequences)
+#             exit()
             for idx in range(0, num_sequences * self.skip + 1, skip):
                 curr_seq_data = np.concatenate(
                     frame_data[idx:idx + self.seq_len], axis=0)
