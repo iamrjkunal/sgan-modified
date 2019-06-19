@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-sensor_final = pd.read_csv("sensor_final.csv", delimiter= ",",header =None)
+sensor_final = pd.read_csv("sensor_final.csv", delimiter= ",",header =None,low_memory=False)
 sensor_final = sensor_final.drop(sensor_final.columns[0], axis=1) 
 sensor_final = sensor_final[[4, 3, 1, 2]]
 sensor_final = sensor_final.drop(sensor_final.index[0])
