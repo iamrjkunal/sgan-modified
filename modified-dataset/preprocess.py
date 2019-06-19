@@ -15,4 +15,12 @@ for i,content in enumerate(data):
 sensor_final = pd.concat([i for i in sensor], ignore_index=True)
 sensor_final.sort_values(by=['month','timestamp'], inplace=True)
 sensor_final.to_csv('sensor_final.csv')
+oct_data = sensor_final[sensor_final["month"]=='10']
+oct_data.to_csv('oct_data.csv')
+nov_data = sensor_final[sensor_final["month"]=='11']
+nov_data.to_csv('nov_data.csv')
+dec_data = sensor_final[sensor_final["month"]=='12']
+dec_data.to_csv('dec_data.csv')
+jan_data = sensor_final[sensor_final["month"]=='01']
+jan_data.to_csv('jan_data.csv')
 
