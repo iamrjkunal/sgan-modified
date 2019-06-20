@@ -4,3 +4,5 @@ env/
 #ignoring files
 checkpoint_no_model.pt
 checkpoint_with_model.pt
+scripts/gan_test_no_model.pt
+scripts/gan_test_with_model.pt

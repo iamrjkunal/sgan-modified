@@ -1,13 +1,13 @@
 python train.py \
   --dataset_name 'oct_data' \
   --delim tab \
-  --d_type 'local' \
+  --d_type 'global' \
   --pred_len 8 \
   --encoder_h_dim_g 32 \
-  --encoder_h_dim_d 64\
+  --encoder_h_dim_d 48\
   --decoder_h_dim 32 \
   --embedding_dim 16 \
-  --bottleneck_dim 32 \
+  --bottleneck_dim 8 \
   --mlp_dim 64 \
   --num_layers 1 \
   --noise_dim 8 \
@@ -17,18 +17,18 @@ python train.py \
   --l2_loss_weight 1 \
   --batch_norm 0 \
   --dropout 0 \
-  --batch_size 32 \
+  --batch_size 64 \
   --g_learning_rate 1e-3 \
   --g_steps 1 \
   --d_learning_rate 1e-3 \
-  --d_steps 2 \
-  --checkpoint_every 10 \
-  --print_every 50 \
-  --num_iterations 20000 \
-  --num_epochs 500 \
+  --d_steps 1 \
+  --checkpoint_every 300 \
+  --print_every 100 \
+  --num_iterations 7537 \
+  --num_epochs 200 \
   --pooling_type 'pool_net' \
-  --clipping_threshold_g 1.5 \
-  --best_k 10 \
-  --gpu_num 1 \
+  --clipping_threshold_g 2 \
+  --best_k 20 \
+  --gpu_num 0 \
   --checkpoint_name gan_test \
-  --restore_from_checkpoint 0
+  --restore_from_checkpoint 1
