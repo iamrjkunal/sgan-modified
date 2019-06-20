@@ -27,8 +27,8 @@ logging.basicConfig(level=logging.INFO, format=FORMAT, stream=sys.stdout)
 logger = logging.getLogger(__name__)
 
 # Dataset options
-parser.add_argument('--dataset_name', default='zara1', type=str)
-parser.add_argument('--delim', default=' ')
+parser.add_argument('--dataset_name', default='oct_data', type=str)
+parser.add_argument('--delim', default='\t')
 parser.add_argument('--loader_num_workers', default=4, type=int)
 parser.add_argument('--obs_len', default=8, type=int)
 parser.add_argument('--pred_len', default=8, type=int)
@@ -308,7 +308,7 @@ def main(args):
                     checkpoint['metrics_train'][k].append(v)
 
                 min_ade = min(checkpoint['metrics_val']['ade'])
-                min_ade_nl = min(checkpoint['metrics_val']['ade_nl'])
+#                 min_ade_nl = min(checkpoint['metrics_val']['ade_nl'])
 
                 if metrics_val['ade'] == min_ade:
                     logger.info('New low for avg_disp_error')
@@ -316,11 +316,11 @@ def main(args):
                     checkpoint['g_best_state'] = generator.state_dict()
                     checkpoint['d_best_state'] = discriminator.state_dict()
 
-                if metrics_val['ade_nl'] == min_ade_nl:
-                    logger.info('New low for avg_disp_error_nl')
-                    checkpoint['best_t_nl'] = t
-                    checkpoint['g_best_nl_state'] = generator.state_dict()
-                    checkpoint['d_best_nl_state'] = discriminator.state_dict()
+#                 if metrics_val['ade_nl'] == min_ade_nl:
+#                     logger.info('New low for avg_disp_error_nl')
+#                     checkpoint['best_t_nl'] = t
+#                     checkpoint['g_best_nl_state'] = generator.state_dict()
+#                     checkpoint['d_best_nl_state'] = discriminator.state_dict()
 
                 # Save another checkpoint with model weights and
                 # optimizer state
@@ -363,8 +363,10 @@ def discriminator_step(
     args, batch, generator, discriminator, d_loss_fn, optimizer_d
 ):
     batch = [tensor.cuda() for tensor in batch]
-    (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, non_linear_ped,
-     loss_mask, seq_start_end) = batch
+#     (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, non_linear_ped,
+#      loss_mask, seq_start_end) = batch
+    (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, loss_mask, seq_start_end) = batch
+
     losses = {}
     loss = torch.zeros(1).to(pred_traj_gt)
 
@@ -401,8 +403,10 @@ def generator_step(
     args, batch, generator, discriminator, g_loss_fn, optimizer_g
 ):
     batch = [tensor.cuda() for tensor in batch]
-    (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, non_linear_ped,
-     loss_mask, seq_start_end) = batch
+#     (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, non_linear_ped,
+#      loss_mask, seq_start_end) = batch
+    (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, loss_mask, seq_start_end) = batch
+
     losses = {}
     loss = torch.zeros(1).to(pred_traj_gt)
     g_l2_loss_rel = []
@@ -469,9 +473,11 @@ def check_accuracy(
     with torch.no_grad():
         for batch in loader:
             batch = [tensor.cuda() for tensor in batch]
-            (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel,
-             non_linear_ped, loss_mask, seq_start_end) = batch
-            linear_ped = 1 - non_linear_ped
+#             (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel,
+#              non_linear_ped, loss_mask, seq_start_end) = batch
+            (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, loss_mask, seq_start_end) = batch
+
+#             linear_ped = 1 - non_linear_ped
             loss_mask = loss_mask[:, args.obs_len:]
 
             pred_traj_fake_rel = generator(
@@ -483,13 +489,11 @@ def check_accuracy(
                 pred_traj_gt, pred_traj_gt_rel, pred_traj_fake,
                 pred_traj_fake_rel, loss_mask
             )
-            ade, ade_l, ade_nl = cal_ade(
-                pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped
-            )
+            ade = cal_ade(
+                pred_traj_gt, pred_traj_fake)
 
-            fde, fde_l, fde_nl = cal_fde(
-                pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped
-            )
+            fde = cal_fde(
+                pred_traj_gt, pred_traj_fake)
 
             traj_real = torch.cat([obs_traj, pred_traj_gt], dim=0)
             traj_real_rel = torch.cat([obs_traj_rel, pred_traj_gt_rel], dim=0)
@@ -505,16 +509,16 @@ def check_accuracy(
             g_l2_losses_abs.append(g_l2_loss_abs.item())
             g_l2_losses_rel.append(g_l2_loss_rel.item())
             disp_error.append(ade.item())
-            disp_error_l.append(ade_l.item())
-            disp_error_nl.append(ade_nl.item())
+#             disp_error_l.append(ade_l.item())
+#             disp_error_nl.append(ade_nl.item())
             f_disp_error.append(fde.item())
-            f_disp_error_l.append(fde_l.item())
-            f_disp_error_nl.append(fde_nl.item())
+#             f_disp_error_l.append(fde_l.item())
+#             f_disp_error_nl.append(fde_nl.item())
 
             loss_mask_sum += torch.numel(loss_mask.data)
             total_traj += pred_traj_gt.size(1)
-            total_traj_l += torch.sum(linear_ped).item()
-            total_traj_nl += torch.sum(non_linear_ped).item()
+#             total_traj_l += torch.sum(linear_ped).item()
+#             total_traj_nl += torch.sum(non_linear_ped).item()
             if limit and total_traj >= args.num_samples_check:
                 break
 
@@ -524,19 +528,19 @@ def check_accuracy(
 
     metrics['ade'] = sum(disp_error) / (total_traj * args.pred_len)
     metrics['fde'] = sum(f_disp_error) / total_traj
-    if total_traj_l != 0:
-        metrics['ade_l'] = sum(disp_error_l) / (total_traj_l * args.pred_len)
-        metrics['fde_l'] = sum(f_disp_error_l) / total_traj_l
-    else:
-        metrics['ade_l'] = 0
-        metrics['fde_l'] = 0
-    if total_traj_nl != 0:
-        metrics['ade_nl'] = sum(disp_error_nl) / (
-            total_traj_nl * args.pred_len)
-        metrics['fde_nl'] = sum(f_disp_error_nl) / total_traj_nl
-    else:
-        metrics['ade_nl'] = 0
-        metrics['fde_nl'] = 0
+#     if total_traj_l != 0:
+#         metrics['ade_l'] = sum(disp_error_l) / (total_traj_l * args.pred_len)
+#         metrics['fde_l'] = sum(f_disp_error_l) / total_traj_l
+#     else:
+#         metrics['ade_l'] = 0
+#         metrics['fde_l'] = 0
+#     if total_traj_nl != 0:
+#         metrics['ade_nl'] = sum(disp_error_nl) / (
+#             total_traj_nl * args.pred_len)
+#         metrics['fde_nl'] = sum(f_disp_error_nl) / total_traj_nl
+#     else:
+#         metrics['ade_nl'] = 0
+#         metrics['fde_nl'] = 0
 
     generator.train()
     return metrics
@@ -555,24 +559,22 @@ def cal_l2_losses(
     return g_l2_loss_abs, g_l2_loss_rel
 
 
-def cal_ade(pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped):
+def cal_ade(pred_traj_gt, pred_traj_fake):
     ade = displacement_error(pred_traj_fake, pred_traj_gt)
-    ade_l = displacement_error(pred_traj_fake, pred_traj_gt, linear_ped)
-    ade_nl = displacement_error(pred_traj_fake, pred_traj_gt, non_linear_ped)
-    return ade, ade_l, ade_nl
+#     ade_l = displacement_error(pred_traj_fake, pred_traj_gt, linear_ped)
+#     ade_nl = displacement_error(pred_traj_fake, pred_traj_gt, non_linear_ped)
+    return ade
 
 
-def cal_fde(
-    pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped
-):
+def cal_fde(pred_traj_gt, pred_traj_fake):
     fde = final_displacement_error(pred_traj_fake[-1], pred_traj_gt[-1])
-    fde_l = final_displacement_error(
-        pred_traj_fake[-1], pred_traj_gt[-1], linear_ped
-    )
-    fde_nl = final_displacement_error(
-        pred_traj_fake[-1], pred_traj_gt[-1], non_linear_ped
-    )
-    return fde, fde_l, fde_nl
+#     fde_l = final_displacement_error(
+#         pred_traj_fake[-1], pred_traj_gt[-1], linear_ped
+#     )
+#     fde_nl = final_displacement_error(
+#         pred_traj_fake[-1], pred_traj_gt[-1], non_linear_ped
+#     )
+    return fde
 
 
 if __name__ == '__main__':

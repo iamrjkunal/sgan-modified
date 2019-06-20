@@ -1,5 +1,5 @@
 python train.py \
-  --dataset_name 'zara1' \
+  --dataset_name 'oct_data' \
   --delim tab \
   --d_type 'local' \
   --pred_len 8 \

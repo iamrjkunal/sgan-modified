@@ -64,7 +64,7 @@ class Encoder(nn.Module):
             embedding_dim, h_dim, num_layers, dropout=dropout
         )
         ############## coverting (xi,yi) to ei as specified in the paper 
-        self.spatial_embedding = nn.Linear(2, embedding_dim)
+        self.spatial_embedding = nn.Linear(1, embedding_dim)
 
     def init_hidden(self, batch):
         return (
@@ -81,7 +81,7 @@ class Encoder(nn.Module):
         """
         # Encode observed Trajectory
         batch = obs_traj.size(1)
-        obs_traj_embedding = self.spatial_embedding(obs_traj.view(-1, 2))
+        obs_traj_embedding = self.spatial_embedding(obs_traj.view(-1, 1))
         obs_traj_embedding = obs_traj_embedding.view(
             -1, batch, self.embedding_dim
         )
@@ -143,8 +143,8 @@ class Decoder(nn.Module):
                 dropout=dropout
             )
 
-        self.spatial_embedding = nn.Linear(2, embedding_dim)
-        self.hidden2pos = nn.Linear(h_dim, 2)
+        self.spatial_embedding = nn.Linear(1, embedding_dim)
+        self.hidden2pos = nn.Linear(h_dim, 1)
 
     def forward(self, last_pos, last_pos_rel, state_tuple, seq_start_end):
         """
@@ -204,7 +204,7 @@ class PoolHiddenNet(nn.Module):
         mlp_pre_dim = embedding_dim + h_dim
         mlp_pre_pool_dims = [mlp_pre_dim, 512, bottleneck_dim]
 
-        self.spatial_embedding = nn.Linear(2, embedding_dim)
+        self.spatial_embedding = nn.Linear(1, embedding_dim)
         self.mlp_pre_pool = make_mlp(
             mlp_pre_pool_dims,
             activation=activation,

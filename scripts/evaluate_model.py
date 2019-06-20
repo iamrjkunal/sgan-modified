@@ -61,8 +61,10 @@ def evaluate(args, loader, generator, num_samples):
     with torch.no_grad():
         for batch in loader:
             batch = [tensor.cuda() for tensor in batch]
-            (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel,
-             non_linear_ped, loss_mask, seq_start_end) = batch
+#             (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel,
+#              non_linear_ped, loss_mask, seq_start_end) = batch
+            (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, loss_mask, seq_start_end) = batch
+
 
             ade, fde = [], []
             total_traj += pred_traj_gt.size(1)
