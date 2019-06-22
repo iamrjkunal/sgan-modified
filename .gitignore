@@ -1,6 +1,6 @@
 #ignoring folders
 env/
-
+scripts/model/
 #ignoring files
 checkpoint_no_model.pt
 checkpoint_with_model.pt
