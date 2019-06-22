@@ -43,10 +43,10 @@ def seq_collate(data):
 
 def read_file(_path, delim='\t'):
     data = []
-#     if delim == 'tab':
-#         delim = '\t'
-#     elif delim == 'space':
-#         delim = ' '
+    if delim == 'tab':
+        delim = '\t'
+    elif delim == 'space':
+        delim = ' '
     with open(_path, 'r') as f:
         for line in f:
             line = line.strip().split(delim)
