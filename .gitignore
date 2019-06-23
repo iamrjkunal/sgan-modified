@@ -4,6 +4,9 @@ mysganpretrained/
 pretrained_sgan/
 scripts/model_tf/
 
+#ignoring other files
+.*pyc
+
 
 #ignoring files
 checkpoint_no_model.pt
