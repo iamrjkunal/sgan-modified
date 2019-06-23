@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 # Dataset options
 parser.add_argument('--dataset_name', default='zara1', type=str)
-parser.add_argument('--delim', default=' ')
+parser.add_argument('--delim', default='\t')
 parser.add_argument('--loader_num_workers', default=4, type=int)
 parser.add_argument('--obs_len', default=8, type=int)
 parser.add_argument('--pred_len', default=8, type=int)
@@ -117,6 +117,7 @@ def main(args):
 
     logger.info("Initializing train dataset")
     train_dset, train_loader = data_loader(args, train_path)
+#     exit()
     logger.info("Initializing val dataset")
     _, val_loader = data_loader(args, val_path)
 
@@ -363,10 +364,18 @@ def discriminator_step(
     args, batch, generator, discriminator, d_loss_fn, optimizer_d
 ):
     batch = [tensor.cuda() for tensor in batch]
+#     print(batch)
+#     exit()
     (obs_traj, pred_traj_gt, obs_traj_rel, pred_traj_gt_rel, non_linear_ped,
      loss_mask, seq_start_end) = batch
+#     print(pred_traj_gt.size())
+#     exit()
     losses = {}
     loss = torch.zeros(1).to(pred_traj_gt)
+#     print(torch.zeros(1))
+#     print(loss)
+#     print(loss.size())
+#     exit()
 
     generator_out = generator(obs_traj, obs_traj_rel, seq_start_end)
 
@@ -383,8 +392,11 @@ def discriminator_step(
 
     # Compute loss with optional gradient penalty
     data_loss = d_loss_fn(scores_real, scores_fake)
+#     print(data_loss)
     losses['D_data_loss'] = data_loss.item()
     loss += data_loss
+#     print(loss)
+#     exit()
     losses['D_total_loss'] = loss.item()
 
     optimizer_d.zero_grad()
@@ -406,8 +418,11 @@ def generator_step(
     losses = {}
     loss = torch.zeros(1).to(pred_traj_gt)
     g_l2_loss_rel = []
+#     print(loss_mask.size())
 
     loss_mask = loss_mask[:, args.obs_len:]
+#     print(loss_mask.size())
+#     exit()
 
     for _ in range(args.best_k):
         generator_out = generator(obs_traj, obs_traj_rel, seq_start_end)
@@ -454,10 +469,36 @@ def generator_step(
 
     return losses
 
-
-def check_accuracy(
-    args, loader, generator, discriminator, d_loss_fn, limit=False
+def cal_l2_losses(
+    pred_traj_gt, pred_traj_gt_rel, pred_traj_fake, pred_traj_fake_rel,
+    loss_mask
 ):
+    g_l2_loss_abs = l2_loss(
+        pred_traj_fake, pred_traj_gt, loss_mask, mode='sum'
+    )
+    g_l2_loss_rel = l2_loss(
+        pred_traj_fake_rel, pred_traj_gt_rel, loss_mask, mode='sum'
+    )
+    return g_l2_loss_abs, g_l2_loss_rel
+
+
+def cal_ade(pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped):
+    ade = displacement_error(pred_traj_fake, pred_traj_gt)
+    ade_l = displacement_error(pred_traj_fake, pred_traj_gt, linear_ped)
+    ade_nl = displacement_error(pred_traj_fake, pred_traj_gt, non_linear_ped)
+    return ade, ade_l, ade_nl
+
+
+def cal_fde(pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped):
+#     print(pred_traj_fake[-1].size(), pred_traj_gt[-1].size())
+#     exit()
+    fde = final_displacement_error(pred_traj_fake[-1], pred_traj_gt[-1])
+    fde_l = final_displacement_error(pred_traj_fake[-1], pred_traj_gt[-1], linear_ped)
+    fde_nl = final_displacement_error(pred_traj_fake[-1], pred_traj_gt[-1], non_linear_ped)
+    return fde, fde_l, fde_nl
+
+
+def check_accuracy(args, loader, generator, discriminator, d_loss_fn, limit=False):
     d_losses = []
     metrics = {}
     g_l2_losses_abs, g_l2_losses_rel = ([],) * 2
@@ -540,40 +581,6 @@ def check_accuracy(
 
     generator.train()
     return metrics
-
-
-def cal_l2_losses(
-    pred_traj_gt, pred_traj_gt_rel, pred_traj_fake, pred_traj_fake_rel,
-    loss_mask
-):
-    g_l2_loss_abs = l2_loss(
-        pred_traj_fake, pred_traj_gt, loss_mask, mode='sum'
-    )
-    g_l2_loss_rel = l2_loss(
-        pred_traj_fake_rel, pred_traj_gt_rel, loss_mask, mode='sum'
-    )
-    return g_l2_loss_abs, g_l2_loss_rel
-
-
-def cal_ade(pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped):
-    ade = displacement_error(pred_traj_fake, pred_traj_gt)
-    ade_l = displacement_error(pred_traj_fake, pred_traj_gt, linear_ped)
-    ade_nl = displacement_error(pred_traj_fake, pred_traj_gt, non_linear_ped)
-    return ade, ade_l, ade_nl
-
-
-def cal_fde(
-    pred_traj_gt, pred_traj_fake, linear_ped, non_linear_ped
-):
-    fde = final_displacement_error(pred_traj_fake[-1], pred_traj_gt[-1])
-    fde_l = final_displacement_error(
-        pred_traj_fake[-1], pred_traj_gt[-1], linear_ped
-    )
-    fde_nl = final_displacement_error(
-        pred_traj_fake[-1], pred_traj_gt[-1], non_linear_ped
-    )
-    return fde, fde_l, fde_nl
-
 
 if __name__ == '__main__':
     args = parser.parse_args()
