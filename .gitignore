@@ -5,6 +5,7 @@ pretrained_sgan/
 scripts/model_tf/
 
 #ignoring other files
+**/__pycache__
 .*pyc
 
 
