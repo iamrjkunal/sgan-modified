@@ -1,0 +1,1657 @@
+[INFO: train.py:  118]: Initializing train dataset
+[INFO: train.py:  121]: Initializing val dataset
+[INFO: train.py:  129]: There are 42.0625 iterations per epoch
+[INFO: train.py:  153]: Here is the generator:
+[INFO: train.py:  154]: TrajectoryGenerator(
+  (encoder): Encoder(
+    (encoder): LSTM(16, 32)
+    (spatial_embedding): Linear(in_features=2, out_features=16, bias=True)
+  )
+  (decoder): Decoder(
+    (decoder): LSTM(16, 32)
+    (spatial_embedding): Linear(in_features=2, out_features=16, bias=True)
+    (hidden2pos): Linear(in_features=32, out_features=2, bias=True)
+  )
+  (pool_net): PoolHiddenNet(
+    (spatial_embedding): Linear(in_features=2, out_features=16, bias=True)
+    (mlp_pre_pool): Sequential(
+      (0): Linear(in_features=48, out_features=512, bias=True)
+      (1): ReLU()
+      (2): Linear(in_features=512, out_features=8, bias=True)
+      (3): ReLU()
+    )
+  )
+  (mlp_decoder_context): Sequential(
+    (0): Linear(in_features=40, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=24, bias=True)
+    (3): ReLU()
+  )
+)
+[INFO: train.py:  169]: Here is the discriminator:
+[INFO: train.py:  170]: TrajectoryDiscriminator(
+  (encoder): Encoder(
+    (encoder): LSTM(16, 48)
+    (spatial_embedding): Linear(in_features=2, out_features=16, bias=True)
+  )
+  (real_classifier): Sequential(
+    (0): Linear(in_features=48, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=1, bias=True)
+    (3): ReLU()
+  )
+  (pool_net): PoolHiddenNet(
+    (spatial_embedding): Linear(in_features=2, out_features=16, bias=True)
+    (mlp_pre_pool): Sequential(
+      (0): Linear(in_features=64, out_features=512, bias=True)
+      (1): ReLU()
+      (2): Linear(in_features=512, out_features=48, bias=True)
+      (3): ReLU()
+    )
+  )
+)
+[INFO: train.py:  233]: Starting epoch 1
+[INFO: train.py:  278]: t = 1 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 6.365
+[INFO: train.py:  280]:   [D] D_total_loss: 6.365
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.611
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 11.528
+[INFO: train.py:  283]:   [G] G_total_loss: 12.140
+[INFO: train.py:  233]: Starting epoch 2
+[INFO: train.py:  233]: Starting epoch 3
+[INFO: train.py:  233]: Starting epoch 4
+[INFO: train.py:  233]: Starting epoch 5
+[INFO: train.py:  278]: t = 101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.776
+[INFO: train.py:  283]:   [G] G_total_loss: 1.469
+[INFO: train.py:  233]: Starting epoch 6
+[INFO: train.py:  233]: Starting epoch 7
+[INFO: train.py:  233]: Starting epoch 8
+[INFO: train.py:  233]: Starting epoch 9
+[INFO: train.py:  233]: Starting epoch 10
+[INFO: train.py:  278]: t = 201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.988
+[INFO: train.py:  283]:   [G] G_total_loss: 1.681
+[INFO: train.py:  233]: Starting epoch 11
+[INFO: train.py:  233]: Starting epoch 12
+[INFO: train.py:  233]: Starting epoch 13
+[INFO: train.py:  233]: Starting epoch 14
+[INFO: train.py:  233]: Starting epoch 15
+[INFO: train.py:  278]: t = 301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.880
+[INFO: train.py:  283]:   [G] G_total_loss: 1.573
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.905
+[INFO: train.py:  305]:   [val] ade_l: 1.993
+[INFO: train.py:  305]:   [val] ade_nl: 1.659
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.798
+[INFO: train.py:  305]:   [val] fde_l: 3.959
+[INFO: train.py:  305]:   [val] fde_nl: 3.294
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.449
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.449
+[INFO: train.py:  308]:   [train] ade: 0.864
+[INFO: train.py:  308]:   [train] ade_l: 1.814
+[INFO: train.py:  308]:   [train] ade_nl: 1.650
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.729
+[INFO: train.py:  308]:   [train] fde_l: 3.630
+[INFO: train.py:  308]:   [train] fde_nl: 3.302
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.407
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.407
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 16
+[INFO: train.py:  233]: Starting epoch 17
+[INFO: train.py:  233]: Starting epoch 18
+[INFO: train.py:  233]: Starting epoch 19
+[INFO: train.py:  233]: Starting epoch 20
+[INFO: train.py:  278]: t = 401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.800
+[INFO: train.py:  283]:   [G] G_total_loss: 1.493
+[INFO: train.py:  233]: Starting epoch 21
+[INFO: train.py:  233]: Starting epoch 22
+[INFO: train.py:  233]: Starting epoch 23
+[INFO: train.py:  233]: Starting epoch 24
+[INFO: train.py:  278]: t = 501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.719
+[INFO: train.py:  283]:   [G] G_total_loss: 1.412
+[INFO: train.py:  233]: Starting epoch 25
+[INFO: train.py:  233]: Starting epoch 26
+[INFO: train.py:  233]: Starting epoch 27
+[INFO: train.py:  233]: Starting epoch 28
+[INFO: train.py:  233]: Starting epoch 29
+[INFO: train.py:  278]: t = 601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.780
+[INFO: train.py:  283]:   [G] G_total_loss: 1.473
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.878
+[INFO: train.py:  305]:   [val] ade_l: 1.934
+[INFO: train.py:  305]:   [val] ade_nl: 1.609
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.753
+[INFO: train.py:  305]:   [val] fde_l: 3.859
+[INFO: train.py:  305]:   [val] fde_nl: 3.211
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.434
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.434
+[INFO: train.py:  308]:   [train] ade: 0.838
+[INFO: train.py:  308]:   [train] ade_l: 1.772
+[INFO: train.py:  308]:   [train] ade_nl: 1.591
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.679
+[INFO: train.py:  308]:   [train] fde_l: 3.549
+[INFO: train.py:  308]:   [train] fde_nl: 3.186
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.381
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.381
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 30
+[INFO: train.py:  233]: Starting epoch 31
+[INFO: train.py:  233]: Starting epoch 32
+[INFO: train.py:  233]: Starting epoch 33
+[INFO: train.py:  233]: Starting epoch 34
+[INFO: train.py:  278]: t = 701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.923
+[INFO: train.py:  283]:   [G] G_total_loss: 1.616
+[INFO: train.py:  233]: Starting epoch 35
+[INFO: train.py:  233]: Starting epoch 36
+[INFO: train.py:  233]: Starting epoch 37
+[INFO: train.py:  233]: Starting epoch 38
+[INFO: train.py:  233]: Starting epoch 39
+[INFO: train.py:  278]: t = 801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.690
+[INFO: train.py:  283]:   [G] G_total_loss: 1.384
+[INFO: train.py:  233]: Starting epoch 40
+[INFO: train.py:  233]: Starting epoch 41
+[INFO: train.py:  233]: Starting epoch 42
+[INFO: train.py:  233]: Starting epoch 43
+[INFO: train.py:  278]: t = 901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.818
+[INFO: train.py:  283]:   [G] G_total_loss: 1.511
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.833
+[INFO: train.py:  305]:   [val] ade_l: 1.835
+[INFO: train.py:  305]:   [val] ade_nl: 1.526
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.681
+[INFO: train.py:  305]:   [val] fde_l: 3.701
+[INFO: train.py:  305]:   [val] fde_nl: 3.079
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.420
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.420
+[INFO: train.py:  308]:   [train] ade: 0.810
+[INFO: train.py:  308]:   [train] ade_l: 1.704
+[INFO: train.py:  308]:   [train] ade_nl: 1.544
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.635
+[INFO: train.py:  308]:   [train] fde_l: 3.439
+[INFO: train.py:  308]:   [train] fde_nl: 3.116
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.378
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.378
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 44
+[INFO: train.py:  233]: Starting epoch 45
+[INFO: train.py:  233]: Starting epoch 46
+[INFO: train.py:  233]: Starting epoch 47
+[INFO: train.py:  233]: Starting epoch 48
+[INFO: train.py:  278]: t = 1001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.716
+[INFO: train.py:  283]:   [G] G_total_loss: 1.409
+[INFO: train.py:  233]: Starting epoch 49
+[INFO: train.py:  233]: Starting epoch 50
+[INFO: train.py:  233]: Starting epoch 51
+[INFO: train.py:  233]: Starting epoch 52
+[INFO: train.py:  233]: Starting epoch 53
+[INFO: train.py:  278]: t = 1101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.831
+[INFO: train.py:  283]:   [G] G_total_loss: 1.525
+[INFO: train.py:  233]: Starting epoch 54
+[INFO: train.py:  233]: Starting epoch 55
+[INFO: train.py:  233]: Starting epoch 56
+[INFO: train.py:  233]: Starting epoch 57
+[INFO: train.py:  233]: Starting epoch 58
+[INFO: train.py:  278]: t = 1201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.806
+[INFO: train.py:  283]:   [G] G_total_loss: 1.499
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.802
+[INFO: train.py:  305]:   [val] ade_l: 1.766
+[INFO: train.py:  305]:   [val] ade_nl: 1.469
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.625
+[INFO: train.py:  305]:   [val] fde_l: 3.578
+[INFO: train.py:  305]:   [val] fde_nl: 2.977
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.399
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.399
+[INFO: train.py:  308]:   [train] ade: 0.766
+[INFO: train.py:  308]:   [train] ade_l: 1.610
+[INFO: train.py:  308]:   [train] ade_nl: 1.463
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.557
+[INFO: train.py:  308]:   [train] fde_l: 3.271
+[INFO: train.py:  308]:   [train] fde_nl: 2.972
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.343
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.343
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 59
+[INFO: train.py:  233]: Starting epoch 60
+[INFO: train.py:  233]: Starting epoch 61
+[INFO: train.py:  233]: Starting epoch 62
+[INFO: train.py:  278]: t = 1301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.725
+[INFO: train.py:  283]:   [G] G_total_loss: 1.418
+[INFO: train.py:  233]: Starting epoch 63
+[INFO: train.py:  233]: Starting epoch 64
+[INFO: train.py:  233]: Starting epoch 65
+[INFO: train.py:  233]: Starting epoch 66
+[INFO: train.py:  233]: Starting epoch 67
+[INFO: train.py:  278]: t = 1401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.650
+[INFO: train.py:  283]:   [G] G_total_loss: 1.343
+[INFO: train.py:  233]: Starting epoch 68
+[INFO: train.py:  233]: Starting epoch 69
+[INFO: train.py:  233]: Starting epoch 70
+[INFO: train.py:  233]: Starting epoch 71
+[INFO: train.py:  233]: Starting epoch 72
+[INFO: train.py:  278]: t = 1501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.788
+[INFO: train.py:  283]:   [G] G_total_loss: 1.481
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.876
+[INFO: train.py:  305]:   [val] ade_l: 1.929
+[INFO: train.py:  305]:   [val] ade_nl: 1.605
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.754
+[INFO: train.py:  305]:   [val] fde_l: 3.862
+[INFO: train.py:  305]:   [val] fde_nl: 3.213
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.433
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.433
+[INFO: train.py:  308]:   [train] ade: 0.839
+[INFO: train.py:  308]:   [train] ade_l: 1.710
+[INFO: train.py:  308]:   [train] ade_nl: 1.645
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.690
+[INFO: train.py:  308]:   [train] fde_l: 3.447
+[INFO: train.py:  308]:   [train] fde_nl: 3.315
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.386
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.386
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 73
+[INFO: train.py:  233]: Starting epoch 74
+[INFO: train.py:  233]: Starting epoch 75
+[INFO: train.py:  233]: Starting epoch 76
+[INFO: train.py:  233]: Starting epoch 77
+[INFO: train.py:  278]: t = 1601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.686
+[INFO: train.py:  283]:   [G] G_total_loss: 1.379
+[INFO: train.py:  233]: Starting epoch 78
+[INFO: train.py:  233]: Starting epoch 79
+[INFO: train.py:  233]: Starting epoch 80
+[INFO: train.py:  233]: Starting epoch 81
+[INFO: train.py:  278]: t = 1701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.902
+[INFO: train.py:  283]:   [G] G_total_loss: 1.595
+[INFO: train.py:  233]: Starting epoch 82
+[INFO: train.py:  233]: Starting epoch 83
+[INFO: train.py:  233]: Starting epoch 84
+[INFO: train.py:  233]: Starting epoch 85
+[INFO: train.py:  233]: Starting epoch 86
+[INFO: train.py:  278]: t = 1801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.630
+[INFO: train.py:  283]:   [G] G_total_loss: 1.323
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.791
+[INFO: train.py:  305]:   [val] ade_l: 1.741
+[INFO: train.py:  305]:   [val] ade_nl: 1.449
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.611
+[INFO: train.py:  305]:   [val] fde_l: 3.547
+[INFO: train.py:  305]:   [val] fde_nl: 2.951
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.385
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.385
+[INFO: train.py:  308]:   [train] ade: 0.766
+[INFO: train.py:  308]:   [train] ade_l: 1.622
+[INFO: train.py:  308]:   [train] ade_nl: 1.451
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.556
+[INFO: train.py:  308]:   [train] fde_l: 3.294
+[INFO: train.py:  308]:   [train] fde_nl: 2.948
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.342
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.342
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 87
+[INFO: train.py:  233]: Starting epoch 88
+[INFO: train.py:  233]: Starting epoch 89
+[INFO: train.py:  233]: Starting epoch 90
+[INFO: train.py:  233]: Starting epoch 91
+[INFO: train.py:  278]: t = 1901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.671
+[INFO: train.py:  283]:   [G] G_total_loss: 1.364
+[INFO: train.py:  233]: Starting epoch 92
+[INFO: train.py:  233]: Starting epoch 93
+[INFO: train.py:  233]: Starting epoch 94
+[INFO: train.py:  233]: Starting epoch 95
+[INFO: train.py:  233]: Starting epoch 96
+[INFO: train.py:  278]: t = 2001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.553
+[INFO: train.py:  283]:   [G] G_total_loss: 1.247
+[INFO: train.py:  233]: Starting epoch 97
+[INFO: train.py:  233]: Starting epoch 98
+[INFO: train.py:  233]: Starting epoch 99
+[INFO: train.py:  233]: Starting epoch 100
+[INFO: train.py:  233]: Starting epoch 101
+[INFO: train.py:  278]: t = 2101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.731
+[INFO: train.py:  283]:   [G] G_total_loss: 1.424
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.812
+[INFO: train.py:  305]:   [val] ade_l: 1.789
+[INFO: train.py:  305]:   [val] ade_nl: 1.488
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.653
+[INFO: train.py:  305]:   [val] fde_l: 3.639
+[INFO: train.py:  305]:   [val] fde_nl: 3.028
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.395
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.395
+[INFO: train.py:  308]:   [train] ade: 0.781
+[INFO: train.py:  308]:   [train] ade_l: 1.701
+[INFO: train.py:  308]:   [train] ade_nl: 1.444
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.607
+[INFO: train.py:  308]:   [train] fde_l: 3.499
+[INFO: train.py:  308]:   [train] fde_nl: 2.971
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.355
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.355
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 102
+[INFO: train.py:  233]: Starting epoch 103
+[INFO: train.py:  233]: Starting epoch 104
+[INFO: train.py:  233]: Starting epoch 105
+[INFO: train.py:  278]: t = 2201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.612
+[INFO: train.py:  283]:   [G] G_total_loss: 1.305
+[INFO: train.py:  233]: Starting epoch 106
+[INFO: train.py:  233]: Starting epoch 107
+[INFO: train.py:  233]: Starting epoch 108
+[INFO: train.py:  233]: Starting epoch 109
+[INFO: train.py:  233]: Starting epoch 110
+[INFO: train.py:  278]: t = 2301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.584
+[INFO: train.py:  283]:   [G] G_total_loss: 1.277
+[INFO: train.py:  233]: Starting epoch 111
+[INFO: train.py:  233]: Starting epoch 112
+[INFO: train.py:  233]: Starting epoch 113
+[INFO: train.py:  233]: Starting epoch 114
+[INFO: train.py:  233]: Starting epoch 115
+[INFO: train.py:  278]: t = 2401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.724
+[INFO: train.py:  283]:   [G] G_total_loss: 1.417
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.781
+[INFO: train.py:  305]:   [val] ade_l: 1.720
+[INFO: train.py:  305]:   [val] ade_nl: 1.432
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.603
+[INFO: train.py:  305]:   [val] fde_l: 3.528
+[INFO: train.py:  305]:   [val] fde_nl: 2.936
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.389
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.389
+[INFO: train.py:  308]:   [train] ade: 0.715
+[INFO: train.py:  308]:   [train] ade_l: 1.482
+[INFO: train.py:  308]:   [train] ade_nl: 1.382
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.466
+[INFO: train.py:  308]:   [train] fde_l: 3.037
+[INFO: train.py:  308]:   [train] fde_nl: 2.833
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.309
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.309
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 116
+[INFO: train.py:  233]: Starting epoch 117
+[INFO: train.py:  233]: Starting epoch 118
+[INFO: train.py:  233]: Starting epoch 119
+[INFO: train.py:  233]: Starting epoch 120
+[INFO: train.py:  278]: t = 2501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.576
+[INFO: train.py:  283]:   [G] G_total_loss: 1.270
+[INFO: train.py:  233]: Starting epoch 121
+[INFO: train.py:  233]: Starting epoch 122
+[INFO: train.py:  233]: Starting epoch 123
+[INFO: train.py:  233]: Starting epoch 124
+[INFO: train.py:  278]: t = 2601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.748
+[INFO: train.py:  283]:   [G] G_total_loss: 1.442
+[INFO: train.py:  233]: Starting epoch 125
+[INFO: train.py:  233]: Starting epoch 126
+[INFO: train.py:  233]: Starting epoch 127
+[INFO: train.py:  233]: Starting epoch 128
+[INFO: train.py:  233]: Starting epoch 129
+[INFO: train.py:  278]: t = 2701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.680
+[INFO: train.py:  283]:   [G] G_total_loss: 1.373
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.778
+[INFO: train.py:  305]:   [val] ade_l: 1.714
+[INFO: train.py:  305]:   [val] ade_nl: 1.426
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.620
+[INFO: train.py:  305]:   [val] fde_l: 3.566
+[INFO: train.py:  305]:   [val] fde_nl: 2.967
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.380
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.380
+[INFO: train.py:  308]:   [train] ade: 0.746
+[INFO: train.py:  308]:   [train] ade_l: 1.587
+[INFO: train.py:  308]:   [train] ade_nl: 1.407
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.546
+[INFO: train.py:  308]:   [train] fde_l: 3.288
+[INFO: train.py:  308]:   [train] fde_nl: 2.916
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.334
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.334
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 130
+[INFO: train.py:  233]: Starting epoch 131
+[INFO: train.py:  233]: Starting epoch 132
+[INFO: train.py:  233]: Starting epoch 133
+[INFO: train.py:  233]: Starting epoch 134
+[INFO: train.py:  278]: t = 2801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.619
+[INFO: train.py:  283]:   [G] G_total_loss: 1.312
+[INFO: train.py:  233]: Starting epoch 135
+[INFO: train.py:  233]: Starting epoch 136
+[INFO: train.py:  233]: Starting epoch 137
+[INFO: train.py:  233]: Starting epoch 138
+[INFO: train.py:  233]: Starting epoch 139
+[INFO: train.py:  278]: t = 2901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.579
+[INFO: train.py:  283]:   [G] G_total_loss: 1.272
+[INFO: train.py:  233]: Starting epoch 140
+[INFO: train.py:  233]: Starting epoch 141
+[INFO: train.py:  233]: Starting epoch 142
+[INFO: train.py:  233]: Starting epoch 143
+[INFO: train.py:  278]: t = 3001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.595
+[INFO: train.py:  283]:   [G] G_total_loss: 1.288
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.808
+[INFO: train.py:  305]:   [val] ade_l: 1.779
+[INFO: train.py:  305]:   [val] ade_nl: 1.480
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.660
+[INFO: train.py:  305]:   [val] fde_l: 3.655
+[INFO: train.py:  305]:   [val] fde_nl: 3.041
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.405
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.405
+[INFO: train.py:  308]:   [train] ade: 0.742
+[INFO: train.py:  308]:   [train] ade_l: 1.557
+[INFO: train.py:  308]:   [train] ade_nl: 1.419
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.527
+[INFO: train.py:  308]:   [train] fde_l: 3.203
+[INFO: train.py:  308]:   [train] fde_nl: 2.918
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.335
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.335
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 144
+[INFO: train.py:  233]: Starting epoch 145
+[INFO: train.py:  233]: Starting epoch 146
+[INFO: train.py:  233]: Starting epoch 147
+[INFO: train.py:  233]: Starting epoch 148
+[INFO: train.py:  278]: t = 3101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.655
+[INFO: train.py:  283]:   [G] G_total_loss: 1.348
+[INFO: train.py:  233]: Starting epoch 149
+[INFO: train.py:  233]: Starting epoch 150
+[INFO: train.py:  233]: Starting epoch 151
+[INFO: train.py:  233]: Starting epoch 152
+[INFO: train.py:  233]: Starting epoch 153
+[INFO: train.py:  278]: t = 3201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.629
+[INFO: train.py:  283]:   [G] G_total_loss: 1.322
+[INFO: train.py:  233]: Starting epoch 154
+[INFO: train.py:  233]: Starting epoch 155
+[INFO: train.py:  233]: Starting epoch 156
+[INFO: train.py:  233]: Starting epoch 157
+[INFO: train.py:  233]: Starting epoch 158
+[INFO: train.py:  278]: t = 3301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.568
+[INFO: train.py:  283]:   [G] G_total_loss: 1.261
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.772
+[INFO: train.py:  305]:   [val] ade_l: 1.700
+[INFO: train.py:  305]:   [val] ade_nl: 1.415
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.588
+[INFO: train.py:  305]:   [val] fde_l: 3.496
+[INFO: train.py:  305]:   [val] fde_nl: 2.909
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.371
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.371
+[INFO: train.py:  308]:   [train] ade: 0.732
+[INFO: train.py:  308]:   [train] ade_l: 1.582
+[INFO: train.py:  308]:   [train] ade_nl: 1.363
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.504
+[INFO: train.py:  308]:   [train] fde_l: 3.250
+[INFO: train.py:  308]:   [train] fde_nl: 2.799
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.323
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.323
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 159
+[INFO: train.py:  233]: Starting epoch 160
+[INFO: train.py:  233]: Starting epoch 161
+[INFO: train.py:  233]: Starting epoch 162
+[INFO: train.py:  278]: t = 3401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.624
+[INFO: train.py:  283]:   [G] G_total_loss: 1.317
+[INFO: train.py:  233]: Starting epoch 163
+[INFO: train.py:  233]: Starting epoch 164
+[INFO: train.py:  233]: Starting epoch 165
+[INFO: train.py:  233]: Starting epoch 166
+[INFO: train.py:  233]: Starting epoch 167
+[INFO: train.py:  278]: t = 3501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.562
+[INFO: train.py:  283]:   [G] G_total_loss: 1.255
+[INFO: train.py:  233]: Starting epoch 168
+[INFO: train.py:  233]: Starting epoch 169
+[INFO: train.py:  233]: Starting epoch 170
+[INFO: train.py:  233]: Starting epoch 171
+[INFO: train.py:  233]: Starting epoch 172
+[INFO: train.py:  278]: t = 3601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.780
+[INFO: train.py:  283]:   [G] G_total_loss: 1.473
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.734
+[INFO: train.py:  305]:   [val] ade_l: 1.616
+[INFO: train.py:  305]:   [val] ade_nl: 1.344
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.510
+[INFO: train.py:  305]:   [val] fde_l: 3.325
+[INFO: train.py:  305]:   [val] fde_nl: 2.767
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.357
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.357
+[INFO: train.py:  308]:   [train] ade: 0.691
+[INFO: train.py:  308]:   [train] ade_l: 1.474
+[INFO: train.py:  308]:   [train] ade_nl: 1.302
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.424
+[INFO: train.py:  308]:   [train] fde_l: 3.037
+[INFO: train.py:  308]:   [train] fde_nl: 2.682
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.303
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.303
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 173
+[INFO: train.py:  233]: Starting epoch 174
+[INFO: train.py:  233]: Starting epoch 175
+[INFO: train.py:  233]: Starting epoch 176
+[INFO: train.py:  233]: Starting epoch 177
+[INFO: train.py:  278]: t = 3701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.650
+[INFO: train.py:  283]:   [G] G_total_loss: 1.343
+[INFO: train.py:  233]: Starting epoch 178
+[INFO: train.py:  233]: Starting epoch 179
+[INFO: train.py:  233]: Starting epoch 180
+[INFO: train.py:  233]: Starting epoch 181
+[INFO: train.py:  278]: t = 3801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.591
+[INFO: train.py:  283]:   [G] G_total_loss: 1.284
+[INFO: train.py:  233]: Starting epoch 182
+[INFO: train.py:  233]: Starting epoch 183
+[INFO: train.py:  233]: Starting epoch 184
+[INFO: train.py:  233]: Starting epoch 185
+[INFO: train.py:  233]: Starting epoch 186
+[INFO: train.py:  278]: t = 3901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.589
+[INFO: train.py:  283]:   [G] G_total_loss: 1.282
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.768
+[INFO: train.py:  305]:   [val] ade_l: 1.692
+[INFO: train.py:  305]:   [val] ade_nl: 1.408
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.588
+[INFO: train.py:  305]:   [val] fde_l: 3.497
+[INFO: train.py:  305]:   [val] fde_nl: 2.910
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.377
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.377
+[INFO: train.py:  308]:   [train] ade: 0.712
+[INFO: train.py:  308]:   [train] ade_l: 1.530
+[INFO: train.py:  308]:   [train] ade_nl: 1.330
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.466
+[INFO: train.py:  308]:   [train] fde_l: 3.153
+[INFO: train.py:  308]:   [train] fde_nl: 2.740
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.308
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.308
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 187
+[INFO: train.py:  233]: Starting epoch 188
+[INFO: train.py:  233]: Starting epoch 189
+[INFO: train.py:  233]: Starting epoch 190
+[INFO: train.py:  233]: Starting epoch 191
+[INFO: train.py:  278]: t = 4001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.670
+[INFO: train.py:  283]:   [G] G_total_loss: 1.363
+[INFO: train.py:  233]: Starting epoch 192
+[INFO: train.py:  233]: Starting epoch 193
+[INFO: train.py:  233]: Starting epoch 194
+[INFO: train.py:  233]: Starting epoch 195
+[INFO: train.py:  233]: Starting epoch 196
+[INFO: train.py:  278]: t = 4101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.781
+[INFO: train.py:  283]:   [G] G_total_loss: 1.474
+[INFO: train.py:  233]: Starting epoch 197
+[INFO: train.py:  233]: Starting epoch 198
+[INFO: train.py:  233]: Starting epoch 199
+[INFO: train.py:  233]: Starting epoch 200
+[INFO: train.py:  233]: Starting epoch 201
+[INFO: train.py:  278]: t = 4201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.555
+[INFO: train.py:  283]:   [G] G_total_loss: 1.248
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.772
+[INFO: train.py:  305]:   [val] ade_l: 1.699
+[INFO: train.py:  305]:   [val] ade_nl: 1.413
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.592
+[INFO: train.py:  305]:   [val] fde_l: 3.506
+[INFO: train.py:  305]:   [val] fde_nl: 2.917
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.371
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.371
+[INFO: train.py:  308]:   [train] ade: 0.714
+[INFO: train.py:  308]:   [train] ade_l: 1.533
+[INFO: train.py:  308]:   [train] ade_nl: 1.337
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.470
+[INFO: train.py:  308]:   [train] fde_l: 3.155
+[INFO: train.py:  308]:   [train] fde_nl: 2.753
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.311
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.311
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 202
+[INFO: train.py:  233]: Starting epoch 203
+[INFO: train.py:  233]: Starting epoch 204
+[INFO: train.py:  233]: Starting epoch 205
+[INFO: train.py:  278]: t = 4301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.623
+[INFO: train.py:  283]:   [G] G_total_loss: 1.316
+[INFO: train.py:  233]: Starting epoch 206
+[INFO: train.py:  233]: Starting epoch 207
+[INFO: train.py:  233]: Starting epoch 208
+[INFO: train.py:  233]: Starting epoch 209
+[INFO: train.py:  233]: Starting epoch 210
+[INFO: train.py:  278]: t = 4401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.500
+[INFO: train.py:  283]:   [G] G_total_loss: 1.193
+[INFO: train.py:  233]: Starting epoch 211
+[INFO: train.py:  233]: Starting epoch 212
+[INFO: train.py:  233]: Starting epoch 213
+[INFO: train.py:  233]: Starting epoch 214
+[INFO: train.py:  233]: Starting epoch 215
+[INFO: train.py:  278]: t = 4501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.608
+[INFO: train.py:  283]:   [G] G_total_loss: 1.301
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.779
+[INFO: train.py:  305]:   [val] ade_l: 1.716
+[INFO: train.py:  305]:   [val] ade_nl: 1.428
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.602
+[INFO: train.py:  305]:   [val] fde_l: 3.526
+[INFO: train.py:  305]:   [val] fde_nl: 2.934
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.378
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.378
+[INFO: train.py:  308]:   [train] ade: 0.721
+[INFO: train.py:  308]:   [train] ade_l: 1.525
+[INFO: train.py:  308]:   [train] ade_nl: 1.367
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.471
+[INFO: train.py:  308]:   [train] fde_l: 3.112
+[INFO: train.py:  308]:   [train] fde_nl: 2.790
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.303
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.303
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 216
+[INFO: train.py:  233]: Starting epoch 217
+[INFO: train.py:  233]: Starting epoch 218
+[INFO: train.py:  233]: Starting epoch 219
+[INFO: train.py:  233]: Starting epoch 220
+[INFO: train.py:  278]: t = 4601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.698
+[INFO: train.py:  283]:   [G] G_total_loss: 1.392
+[INFO: train.py:  233]: Starting epoch 221
+[INFO: train.py:  233]: Starting epoch 222
+[INFO: train.py:  233]: Starting epoch 223
+[INFO: train.py:  233]: Starting epoch 224
+[INFO: train.py:  278]: t = 4701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.604
+[INFO: train.py:  283]:   [G] G_total_loss: 1.297
+[INFO: train.py:  233]: Starting epoch 225
+[INFO: train.py:  233]: Starting epoch 226
+[INFO: train.py:  233]: Starting epoch 227
+[INFO: train.py:  233]: Starting epoch 228
+[INFO: train.py:  233]: Starting epoch 229
+[INFO: train.py:  278]: t = 4801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.631
+[INFO: train.py:  283]:   [G] G_total_loss: 1.324
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.741
+[INFO: train.py:  305]:   [val] ade_l: 1.631
+[INFO: train.py:  305]:   [val] ade_nl: 1.357
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.540
+[INFO: train.py:  305]:   [val] fde_l: 3.390
+[INFO: train.py:  305]:   [val] fde_nl: 2.821
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.355
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.355
+[INFO: train.py:  308]:   [train] ade: 0.689
+[INFO: train.py:  308]:   [train] ade_l: 1.440
+[INFO: train.py:  308]:   [train] ade_nl: 1.322
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.428
+[INFO: train.py:  308]:   [train] fde_l: 2.984
+[INFO: train.py:  308]:   [train] fde_nl: 2.740
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.296
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.296
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 230
+[INFO: train.py:  233]: Starting epoch 231
+[INFO: train.py:  233]: Starting epoch 232
+[INFO: train.py:  233]: Starting epoch 233
+[INFO: train.py:  233]: Starting epoch 234
+[INFO: train.py:  278]: t = 4901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.525
+[INFO: train.py:  283]:   [G] G_total_loss: 1.219
+[INFO: train.py:  233]: Starting epoch 235
+[INFO: train.py:  233]: Starting epoch 236
+[INFO: train.py:  233]: Starting epoch 237
+[INFO: train.py:  233]: Starting epoch 238
+[INFO: train.py:  233]: Starting epoch 239
+[INFO: train.py:  278]: t = 5001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.582
+[INFO: train.py:  283]:   [G] G_total_loss: 1.275
+[INFO: train.py:  233]: Starting epoch 240
+[INFO: train.py:  233]: Starting epoch 241
+[INFO: train.py:  233]: Starting epoch 242
+[INFO: train.py:  233]: Starting epoch 243
+[INFO: train.py:  278]: t = 5101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.382
+[INFO: train.py:  283]:   [G] G_total_loss: 1.075
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.743
+[INFO: train.py:  305]:   [val] ade_l: 1.635
+[INFO: train.py:  305]:   [val] ade_nl: 1.360
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.545
+[INFO: train.py:  305]:   [val] fde_l: 3.401
+[INFO: train.py:  305]:   [val] fde_nl: 2.830
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.362
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.362
+[INFO: train.py:  308]:   [train] ade: 0.687
+[INFO: train.py:  308]:   [train] ade_l: 1.432
+[INFO: train.py:  308]:   [train] ade_nl: 1.319
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.424
+[INFO: train.py:  308]:   [train] fde_l: 2.971
+[INFO: train.py:  308]:   [train] fde_nl: 2.736
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.291
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.291
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 244
+[INFO: train.py:  233]: Starting epoch 245
+[INFO: train.py:  233]: Starting epoch 246
+[INFO: train.py:  233]: Starting epoch 247
+[INFO: train.py:  233]: Starting epoch 248
+[INFO: train.py:  278]: t = 5201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.646
+[INFO: train.py:  283]:   [G] G_total_loss: 1.339
+[INFO: train.py:  233]: Starting epoch 249
+[INFO: train.py:  233]: Starting epoch 250
+[INFO: train.py:  233]: Starting epoch 251
+[INFO: train.py:  233]: Starting epoch 252
+[INFO: train.py:  233]: Starting epoch 253
+[INFO: train.py:  278]: t = 5301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.567
+[INFO: train.py:  283]:   [G] G_total_loss: 1.260
+[INFO: train.py:  233]: Starting epoch 254
+[INFO: train.py:  233]: Starting epoch 255
+[INFO: train.py:  233]: Starting epoch 256
+[INFO: train.py:  233]: Starting epoch 257
+[INFO: train.py:  233]: Starting epoch 258
+[INFO: train.py:  278]: t = 5401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.571
+[INFO: train.py:  283]:   [G] G_total_loss: 1.264
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.735
+[INFO: train.py:  305]:   [val] ade_l: 1.619
+[INFO: train.py:  305]:   [val] ade_nl: 1.347
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.505
+[INFO: train.py:  305]:   [val] fde_l: 3.315
+[INFO: train.py:  305]:   [val] fde_nl: 2.758
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.337
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.337
+[INFO: train.py:  308]:   [train] ade: 0.685
+[INFO: train.py:  308]:   [train] ade_l: 1.437
+[INFO: train.py:  308]:   [train] ade_nl: 1.309
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.390
+[INFO: train.py:  308]:   [train] fde_l: 2.916
+[INFO: train.py:  308]:   [train] fde_nl: 2.656
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.283
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.283
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 259
+[INFO: train.py:  233]: Starting epoch 260
+[INFO: train.py:  233]: Starting epoch 261
+[INFO: train.py:  233]: Starting epoch 262
+[INFO: train.py:  278]: t = 5501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.614
+[INFO: train.py:  283]:   [G] G_total_loss: 1.307
+[INFO: train.py:  233]: Starting epoch 263
+[INFO: train.py:  233]: Starting epoch 264
+[INFO: train.py:  233]: Starting epoch 265
+[INFO: train.py:  233]: Starting epoch 266
+[INFO: train.py:  233]: Starting epoch 267
+[INFO: train.py:  278]: t = 5601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.692
+[INFO: train.py:  283]:   [G] G_total_loss: 1.385
+[INFO: train.py:  233]: Starting epoch 268
+[INFO: train.py:  233]: Starting epoch 269
+[INFO: train.py:  233]: Starting epoch 270
+[INFO: train.py:  233]: Starting epoch 271
+[INFO: train.py:  233]: Starting epoch 272
+[INFO: train.py:  278]: t = 5701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.537
+[INFO: train.py:  283]:   [G] G_total_loss: 1.231
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.735
+[INFO: train.py:  305]:   [val] ade_l: 1.619
+[INFO: train.py:  305]:   [val] ade_nl: 1.347
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.538
+[INFO: train.py:  305]:   [val] fde_l: 3.385
+[INFO: train.py:  305]:   [val] fde_nl: 2.817
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.367
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.367
+[INFO: train.py:  308]:   [train] ade: 0.687
+[INFO: train.py:  308]:   [train] ade_l: 1.441
+[INFO: train.py:  308]:   [train] ade_nl: 1.313
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.425
+[INFO: train.py:  308]:   [train] fde_l: 2.989
+[INFO: train.py:  308]:   [train] fde_nl: 2.724
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.306
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.306
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 273
+[INFO: train.py:  233]: Starting epoch 274
+[INFO: train.py:  233]: Starting epoch 275
+[INFO: train.py:  233]: Starting epoch 276
+[INFO: train.py:  233]: Starting epoch 277
+[INFO: train.py:  278]: t = 5801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.518
+[INFO: train.py:  283]:   [G] G_total_loss: 1.211
+[INFO: train.py:  233]: Starting epoch 278
+[INFO: train.py:  233]: Starting epoch 279
+[INFO: train.py:  233]: Starting epoch 280
+[INFO: train.py:  233]: Starting epoch 281
+[INFO: train.py:  278]: t = 5901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.618
+[INFO: train.py:  283]:   [G] G_total_loss: 1.311
+[INFO: train.py:  233]: Starting epoch 282
+[INFO: train.py:  233]: Starting epoch 283
+[INFO: train.py:  233]: Starting epoch 284
+[INFO: train.py:  233]: Starting epoch 285
+[INFO: train.py:  233]: Starting epoch 286
+[INFO: train.py:  278]: t = 6001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.514
+[INFO: train.py:  283]:   [G] G_total_loss: 1.207
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.706
+[INFO: train.py:  305]:   [val] ade_l: 1.554
+[INFO: train.py:  305]:   [val] ade_nl: 1.293
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.460
+[INFO: train.py:  305]:   [val] fde_l: 3.215
+[INFO: train.py:  305]:   [val] fde_nl: 2.676
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.336
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.336
+[INFO: train.py:  308]:   [train] ade: 0.652
+[INFO: train.py:  308]:   [train] ade_l: 1.336
+[INFO: train.py:  308]:   [train] ade_nl: 1.274
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.351
+[INFO: train.py:  308]:   [train] fde_l: 2.769
+[INFO: train.py:  308]:   [train] fde_nl: 2.639
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.276
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.276
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 287
+[INFO: train.py:  233]: Starting epoch 288
+[INFO: train.py:  233]: Starting epoch 289
+[INFO: train.py:  233]: Starting epoch 290
+[INFO: train.py:  233]: Starting epoch 291
+[INFO: train.py:  278]: t = 6101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.455
+[INFO: train.py:  283]:   [G] G_total_loss: 1.148
+[INFO: train.py:  233]: Starting epoch 292
+[INFO: train.py:  233]: Starting epoch 293
+[INFO: train.py:  233]: Starting epoch 294
+[INFO: train.py:  233]: Starting epoch 295
+[INFO: train.py:  233]: Starting epoch 296
+[INFO: train.py:  278]: t = 6201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.475
+[INFO: train.py:  283]:   [G] G_total_loss: 1.168
+[INFO: train.py:  233]: Starting epoch 297
+[INFO: train.py:  233]: Starting epoch 298
+[INFO: train.py:  233]: Starting epoch 299
+[INFO: train.py:  233]: Starting epoch 300
+[INFO: train.py:  233]: Starting epoch 301
+[INFO: train.py:  278]: t = 6301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.480
+[INFO: train.py:  283]:   [G] G_total_loss: 1.173
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.740
+[INFO: train.py:  305]:   [val] ade_l: 1.630
+[INFO: train.py:  305]:   [val] ade_nl: 1.356
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.537
+[INFO: train.py:  305]:   [val] fde_l: 3.384
+[INFO: train.py:  305]:   [val] fde_nl: 2.816
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.363
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.363
+[INFO: train.py:  308]:   [train] ade: 0.662
+[INFO: train.py:  308]:   [train] ade_l: 1.374
+[INFO: train.py:  308]:   [train] ade_nl: 1.280
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.361
+[INFO: train.py:  308]:   [train] fde_l: 2.823
+[INFO: train.py:  308]:   [train] fde_nl: 2.629
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.273
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.273
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 302
+[INFO: train.py:  233]: Starting epoch 303
+[INFO: train.py:  233]: Starting epoch 304
+[INFO: train.py:  233]: Starting epoch 305
+[INFO: train.py:  278]: t = 6401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.582
+[INFO: train.py:  283]:   [G] G_total_loss: 1.275
+[INFO: train.py:  233]: Starting epoch 306
+[INFO: train.py:  233]: Starting epoch 307
+[INFO: train.py:  233]: Starting epoch 308
+[INFO: train.py:  233]: Starting epoch 309
+[INFO: train.py:  233]: Starting epoch 310
+[INFO: train.py:  278]: t = 6501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.563
+[INFO: train.py:  283]:   [G] G_total_loss: 1.257
+[INFO: train.py:  233]: Starting epoch 311
+[INFO: train.py:  233]: Starting epoch 312
+[INFO: train.py:  233]: Starting epoch 313
+[INFO: train.py:  233]: Starting epoch 314
+[INFO: train.py:  233]: Starting epoch 315
+[INFO: train.py:  278]: t = 6601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.581
+[INFO: train.py:  283]:   [G] G_total_loss: 1.274
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.724
+[INFO: train.py:  305]:   [val] ade_l: 1.594
+[INFO: train.py:  305]:   [val] ade_nl: 1.327
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.512
+[INFO: train.py:  305]:   [val] fde_l: 3.330
+[INFO: train.py:  305]:   [val] fde_nl: 2.771
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.350
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.350
+[INFO: train.py:  308]:   [train] ade: 0.646
+[INFO: train.py:  308]:   [train] ade_l: 1.335
+[INFO: train.py:  308]:   [train] ade_nl: 1.251
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.339
+[INFO: train.py:  308]:   [train] fde_l: 2.769
+[INFO: train.py:  308]:   [train] fde_nl: 2.594
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.267
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.267
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 316
+[INFO: train.py:  233]: Starting epoch 317
+[INFO: train.py:  233]: Starting epoch 318
+[INFO: train.py:  233]: Starting epoch 319
+[INFO: train.py:  233]: Starting epoch 320
+[INFO: train.py:  278]: t = 6701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.472
+[INFO: train.py:  283]:   [G] G_total_loss: 1.165
+[INFO: train.py:  233]: Starting epoch 321
+[INFO: train.py:  233]: Starting epoch 322
+[INFO: train.py:  233]: Starting epoch 323
+[INFO: train.py:  233]: Starting epoch 324
+[INFO: train.py:  278]: t = 6801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.669
+[INFO: train.py:  283]:   [G] G_total_loss: 1.362
+[INFO: train.py:  233]: Starting epoch 325
+[INFO: train.py:  233]: Starting epoch 326
+[INFO: train.py:  233]: Starting epoch 327
+[INFO: train.py:  233]: Starting epoch 328
+[INFO: train.py:  233]: Starting epoch 329
+[INFO: train.py:  278]: t = 6901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.510
+[INFO: train.py:  283]:   [G] G_total_loss: 1.203
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.711
+[INFO: train.py:  305]:   [val] ade_l: 1.566
+[INFO: train.py:  305]:   [val] ade_nl: 1.303
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.476
+[INFO: train.py:  305]:   [val] fde_l: 3.249
+[INFO: train.py:  305]:   [val] fde_nl: 2.704
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.332
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.332
+[INFO: train.py:  308]:   [train] ade: 0.664
+[INFO: train.py:  308]:   [train] ade_l: 1.415
+[INFO: train.py:  308]:   [train] ade_nl: 1.250
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.364
+[INFO: train.py:  308]:   [train] fde_l: 2.908
+[INFO: train.py:  308]:   [train] fde_nl: 2.569
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.275
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.275
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 330
+[INFO: train.py:  233]: Starting epoch 331
+[INFO: train.py:  233]: Starting epoch 332
+[INFO: train.py:  233]: Starting epoch 333
+[INFO: train.py:  233]: Starting epoch 334
+[INFO: train.py:  278]: t = 7001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.523
+[INFO: train.py:  283]:   [G] G_total_loss: 1.217
+[INFO: train.py:  233]: Starting epoch 335
+[INFO: train.py:  233]: Starting epoch 336
+[INFO: train.py:  233]: Starting epoch 337
+[INFO: train.py:  233]: Starting epoch 338
+[INFO: train.py:  233]: Starting epoch 339
+[INFO: train.py:  278]: t = 7101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.575
+[INFO: train.py:  283]:   [G] G_total_loss: 1.268
+[INFO: train.py:  233]: Starting epoch 340
+[INFO: train.py:  233]: Starting epoch 341
+[INFO: train.py:  233]: Starting epoch 342
+[INFO: train.py:  233]: Starting epoch 343
+[INFO: train.py:  278]: t = 7201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.510
+[INFO: train.py:  283]:   [G] G_total_loss: 1.203
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.729
+[INFO: train.py:  305]:   [val] ade_l: 1.604
+[INFO: train.py:  305]:   [val] ade_nl: 1.335
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.519
+[INFO: train.py:  305]:   [val] fde_l: 3.344
+[INFO: train.py:  305]:   [val] fde_nl: 2.783
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.354
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.354
+[INFO: train.py:  308]:   [train] ade: 0.665
+[INFO: train.py:  308]:   [train] ade_l: 1.413
+[INFO: train.py:  308]:   [train] ade_nl: 1.257
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.372
+[INFO: train.py:  308]:   [train] fde_l: 2.914
+[INFO: train.py:  308]:   [train] fde_nl: 2.593
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.279
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.279
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 344
+[INFO: train.py:  233]: Starting epoch 345
+[INFO: train.py:  233]: Starting epoch 346
+[INFO: train.py:  233]: Starting epoch 347
+[INFO: train.py:  233]: Starting epoch 348
+[INFO: train.py:  278]: t = 7301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.569
+[INFO: train.py:  283]:   [G] G_total_loss: 1.262
+[INFO: train.py:  233]: Starting epoch 349
+[INFO: train.py:  233]: Starting epoch 350
+[INFO: train.py:  233]: Starting epoch 351
+[INFO: train.py:  233]: Starting epoch 352
+[INFO: train.py:  233]: Starting epoch 353
+[INFO: train.py:  278]: t = 7401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.469
+[INFO: train.py:  283]:   [G] G_total_loss: 1.162
+[INFO: train.py:  233]: Starting epoch 354
+[INFO: train.py:  233]: Starting epoch 355
+[INFO: train.py:  233]: Starting epoch 356
+[INFO: train.py:  233]: Starting epoch 357
+[INFO: train.py:  233]: Starting epoch 358
+[INFO: train.py:  278]: t = 7501 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.509
+[INFO: train.py:  283]:   [G] G_total_loss: 1.203
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.700
+[INFO: train.py:  305]:   [val] ade_l: 1.540
+[INFO: train.py:  305]:   [val] ade_nl: 1.282
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.445
+[INFO: train.py:  305]:   [val] fde_l: 3.183
+[INFO: train.py:  305]:   [val] fde_nl: 2.648
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.330
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.330
+[INFO: train.py:  308]:   [train] ade: 0.634
+[INFO: train.py:  308]:   [train] ade_l: 1.297
+[INFO: train.py:  308]:   [train] ade_nl: 1.240
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.302
+[INFO: train.py:  308]:   [train] fde_l: 2.664
+[INFO: train.py:  308]:   [train] fde_nl: 2.547
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.255
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.255
+[INFO: train.py:  315]: New low for avg_disp_error
+[INFO: train.py:  321]: New low for avg_disp_error_nl
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 359
+[INFO: train.py:  233]: Starting epoch 360
+[INFO: train.py:  233]: Starting epoch 361
+[INFO: train.py:  233]: Starting epoch 362
+[INFO: train.py:  278]: t = 7601 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.605
+[INFO: train.py:  283]:   [G] G_total_loss: 1.298
+[INFO: train.py:  233]: Starting epoch 363
+[INFO: train.py:  233]: Starting epoch 364
+[INFO: train.py:  233]: Starting epoch 365
+[INFO: train.py:  233]: Starting epoch 366
+[INFO: train.py:  233]: Starting epoch 367
+[INFO: train.py:  278]: t = 7701 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.509
+[INFO: train.py:  283]:   [G] G_total_loss: 1.202
+[INFO: train.py:  233]: Starting epoch 368
+[INFO: train.py:  233]: Starting epoch 369
+[INFO: train.py:  233]: Starting epoch 370
+[INFO: train.py:  233]: Starting epoch 371
+[INFO: train.py:  233]: Starting epoch 372
+[INFO: train.py:  278]: t = 7801 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.486
+[INFO: train.py:  283]:   [G] G_total_loss: 1.179
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.714
+[INFO: train.py:  305]:   [val] ade_l: 1.572
+[INFO: train.py:  305]:   [val] ade_nl: 1.308
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.491
+[INFO: train.py:  305]:   [val] fde_l: 3.282
+[INFO: train.py:  305]:   [val] fde_nl: 2.731
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.344
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.344
+[INFO: train.py:  308]:   [train] ade: 0.649
+[INFO: train.py:  308]:   [train] ade_l: 1.364
+[INFO: train.py:  308]:   [train] ade_nl: 1.237
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.343
+[INFO: train.py:  308]:   [train] fde_l: 2.824
+[INFO: train.py:  308]:   [train] fde_nl: 2.561
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.268
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.268
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 373
+[INFO: train.py:  233]: Starting epoch 374
+[INFO: train.py:  233]: Starting epoch 375
+[INFO: train.py:  233]: Starting epoch 376
+[INFO: train.py:  233]: Starting epoch 377
+[INFO: train.py:  278]: t = 7901 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.456
+[INFO: train.py:  283]:   [G] G_total_loss: 1.149
+[INFO: train.py:  233]: Starting epoch 378
+[INFO: train.py:  233]: Starting epoch 379
+[INFO: train.py:  233]: Starting epoch 380
+[INFO: train.py:  233]: Starting epoch 381
+[INFO: train.py:  278]: t = 8001 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.494
+[INFO: train.py:  283]:   [G] G_total_loss: 1.187
+[INFO: train.py:  233]: Starting epoch 382
+[INFO: train.py:  233]: Starting epoch 383
+[INFO: train.py:  233]: Starting epoch 384
+[INFO: train.py:  233]: Starting epoch 385
+[INFO: train.py:  233]: Starting epoch 386
+[INFO: train.py:  278]: t = 8101 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.505
+[INFO: train.py:  283]:   [G] G_total_loss: 1.198
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.709
+[INFO: train.py:  305]:   [val] ade_l: 1.561
+[INFO: train.py:  305]:   [val] ade_nl: 1.299
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.477
+[INFO: train.py:  305]:   [val] fde_l: 3.252
+[INFO: train.py:  305]:   [val] fde_nl: 2.706
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.334
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.334
+[INFO: train.py:  308]:   [train] ade: 0.635
+[INFO: train.py:  308]:   [train] ade_l: 1.307
+[INFO: train.py:  308]:   [train] ade_nl: 1.237
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.318
+[INFO: train.py:  308]:   [train] fde_l: 2.711
+[INFO: train.py:  308]:   [train] fde_nl: 2.566
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.252
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.252
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
+[INFO: train.py:  233]: Starting epoch 387
+[INFO: train.py:  233]: Starting epoch 388
+[INFO: train.py:  233]: Starting epoch 389
+[INFO: train.py:  233]: Starting epoch 390
+[INFO: train.py:  233]: Starting epoch 391
+[INFO: train.py:  278]: t = 8201 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.667
+[INFO: train.py:  283]:   [G] G_total_loss: 1.360
+[INFO: train.py:  233]: Starting epoch 392
+[INFO: train.py:  233]: Starting epoch 393
+[INFO: train.py:  233]: Starting epoch 394
+[INFO: train.py:  233]: Starting epoch 395
+[INFO: train.py:  233]: Starting epoch 396
+[INFO: train.py:  278]: t = 8301 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.639
+[INFO: train.py:  283]:   [G] G_total_loss: 1.333
+[INFO: train.py:  233]: Starting epoch 397
+[INFO: train.py:  233]: Starting epoch 398
+[INFO: train.py:  233]: Starting epoch 399
+[INFO: train.py:  233]: Starting epoch 400
+[INFO: train.py:  233]: Starting epoch 401
+[INFO: train.py:  278]: t = 8401 / 8412
+[INFO: train.py:  280]:   [D] D_data_loss: 1.386
+[INFO: train.py:  280]:   [D] D_total_loss: 1.386
+[INFO: train.py:  283]:   [G] G_discriminator_loss: 0.693
+[INFO: train.py:  283]:   [G] G_l2_loss_rel: 0.455
+[INFO: train.py:  283]:   [G] G_total_loss: 1.148
+[INFO: train.py:  294]: Checking stats on val ...
+[INFO: train.py:  298]: Checking stats on train ...
+[INFO: train.py:  305]:   [val] ade: 0.739
+[INFO: train.py:  305]:   [val] ade_l: 1.627
+[INFO: train.py:  305]:   [val] ade_nl: 1.354
+[INFO: train.py:  305]:   [val] d_loss: 1.386
+[INFO: train.py:  305]:   [val] fde: 1.544
+[INFO: train.py:  305]:   [val] fde_l: 3.400
+[INFO: train.py:  305]:   [val] fde_nl: 2.829
+[INFO: train.py:  305]:   [val] g_l2_loss_abs: 0.363
+[INFO: train.py:  305]:   [val] g_l2_loss_rel: 0.363
+[INFO: train.py:  308]:   [train] ade: 0.653
+[INFO: train.py:  308]:   [train] ade_l: 1.371
+[INFO: train.py:  308]:   [train] ade_nl: 1.247
+[INFO: train.py:  308]:   [train] d_loss: 1.386
+[INFO: train.py:  308]:   [train] fde: 1.352
+[INFO: train.py:  308]:   [train] fde_l: 2.838
+[INFO: train.py:  308]:   [train] fde_nl: 2.581
+[INFO: train.py:  308]:   [train] g_l2_loss_abs: 0.276
+[INFO: train.py:  308]:   [train] g_l2_loss_rel: 0.276
+[INFO: train.py:  335]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_with_model.pt
+[INFO: train.py:  337]: Done.
+[INFO: train.py:  343]: Saving checkpoint to /home/anirudhashrk/kunal/sgan-modified/scripts/gan_test_no_model.pt
+[INFO: train.py:  354]: Done.
