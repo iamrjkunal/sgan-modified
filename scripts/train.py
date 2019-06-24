@@ -30,12 +30,22 @@ logger = logging.getLogger(__name__)
 parser.add_argument('--dataset_name', default='zara1', type=str)
 parser.add_argument('--delim', default=' ')
 parser.add_argument('--loader_num_workers', default=4, type=int)
+###--loader_num_workers: The number of background threads to use for data loading
 parser.add_argument('--obs_len', default=8, type=int)
 parser.add_argument('--pred_len', default=8, type=int)
 parser.add_argument('--skip', default=1, type=int)
+###--skip: Number of frames to skip while making the dataset. 
+# For e.g. if Sequence1 in the dataset is from Frame1 - FrameN and skip = 2. 
+# Then Sequence2 will be from Frame3 - FrameN+2
+
+
+###seq_start_end stores the start and end index of each sequence. 
+# For e.g. if you have 3 sequences with 5 trajectories in each sequence, 
+# seq_start_end will store [(0,5),(5,10),(10,15)].
 
 # Optimization
 parser.add_argument('--batch_size', default=64, type=int)
+###--batch_size: How many sequences to use in each minibatch during training 
 parser.add_argument('--num_iterations', default=10000, type=int)
 parser.add_argument('--num_epochs', default=200, type=int)
 
@@ -172,9 +182,7 @@ def main(args):
     d_loss_fn = gan_d_loss
 
     optimizer_g = optim.Adam(generator.parameters(), lr=args.g_learning_rate)
-    optimizer_d = optim.Adam(
-        discriminator.parameters(), lr=args.d_learning_rate
-    )
+    optimizer_d = optim.Adam(discriminator.parameters(), lr=args.d_learning_rate)
 
     # Maybe restore from checkpoint
     restore_path = None
