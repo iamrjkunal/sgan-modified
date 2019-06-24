@@ -2,7 +2,7 @@
 env/
 mysganpretrained/
 pretrained_sgan/
-scripts/model_tf/
+model_tf/
 
 #ignoring other files
 **/__pycache__
