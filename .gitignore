@@ -2,7 +2,7 @@
 env/
 mysganpretrained/
 pretrained_sgan/
-scripts/model_tf/
+model_tf/
 
 #ignoring files
 checkpoint_no_model.pt
