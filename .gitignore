@@ -1,6 +1,9 @@
 #ignoring folders
 env/
-scripts/model/
+mysganpretrained/
+pretrained_sgan/
+model_tf/
+
 #ignoring files
 checkpoint_no_model.pt
 checkpoint_with_model.pt
