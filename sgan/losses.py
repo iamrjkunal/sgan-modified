@@ -42,6 +42,8 @@ def gan_d_loss(scores_real, scores_fake):
     Output:
     - loss: Tensor of shape (,) giving GAN discriminator loss
     """
+#     print(scores_real.size())
+#     exit()
     y_real = torch.ones_like(scores_real) * random.uniform(0.7, 1.2)
     y_fake = torch.zeros_like(scores_fake) * random.uniform(0, 0.3)
     loss_real = bce_loss(scores_real, y_real)
@@ -108,6 +110,8 @@ def final_displacement_error(
     - loss: gives the eculidian displacement error
     """
     loss = pred_pos_gt - pred_pos
+#     print(loss.size())
+#     exit()
     loss = loss**2
     if consider_ped is not None:
         loss = torch.sqrt(loss.sum(dim=1)) * consider_ped

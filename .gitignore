@@ -1,7 +1,14 @@
 #ignoring folders
 env/
-models/
-scripts/model/
+mysganpretrained/
+pretrained_sgan/
+scripts/model_tf/
+
+#ignoring other files
+**/__pycache__
+.*pyc
+
+
 #ignoring files
 checkpoint_no_model.pt
 checkpoint_with_model.pt
