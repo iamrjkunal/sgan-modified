@@ -1,115 +1,104 @@
 import torch
 import torch.nn as nn
-from generate_data import *
+import pandas as pd
+import numpy as np
+from torch.autograd import Variable
 
-#####################
-# Set parameters
-#####################
+dataset = np.loadtxt("lstminput.txt", delimiter='\t')
+timestep = dataset.shape[0]
+train = Variable(torch.from_numpy(dataset[:, :]))
+# trainfinal = Variable(torch.from_numpy(dataset[timestep: timestep +1, :-1]))
+# testfinal_gt = Variable(torch.from_numpy(dataset[timestep: timestep +1, [-1]]))
 
-# Data params
-noise_var = 0
-num_datapoints = 100
-test_size = 0.2
-num_train = int((1-test_size) * num_datapoints)
 
-# Network params
-input_size = 20
-# If `per_element` is True, then LSTM reads in one timestep at a time.
-per_element = True
-if per_element:
-    lstm_input_size = 1
-else:
-    lstm_input_size = input_size
-# size of hidden layers
-h1 = 32
-output_dim = 1
-num_layers = 2
-learning_rate = 1e-3
-num_epochs = 500
-dtype = torch.float
 
-#####################
-# Generate data
-#####################
-data = ARData(num_datapoints, num_prev=input_size, test_size=test_size, noise_var=noise_var, coeffs=fixed_ar_coefficients[input_size])
 
-# make training and test sets in torch
-X_train = torch.from_numpy(data.X_train).type(torch.Tensor)
-X_test = torch.from_numpy(data.X_test).type(torch.Tensor)
-y_train = torch.from_numpy(data.y_train).type(torch.Tensor).view(-1)
-y_test = torch.from_numpy(data.y_test).type(torch.Tensor).view(-1)
+def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
+    layers = []
+    for dim_in, dim_out in zip(dim_list[:-1], dim_list[1:]):
+        layers.append(nn.Linear(dim_in, dim_out))
+        if batch_norm:
+            layers.append(nn.BatchNorm1d(dim_out))
+        if activation == 'relu':
+            layers.append(nn.ReLU())
+        elif activation == 'leakyrelu':
+            layers.append(nn.LeakyReLU())
+        if dropout > 0:
+            layers.append(nn.Dropout(p=dropout))
+    return nn.Sequential(*layers)
 
-X_train = X_train.view([input_size, -1, 1])
-X_test = X_test.view([input_size, -1, 1])
 
-#####################
-# Build model
-#####################
 
-# Here we define our model as a class
 class LSTM(nn.Module):
-
-    def __init__(self, input_dim, hidden_dim, batch_size, output_dim=1,
-                    num_layers=2):
+    
+    def __init__(self, input_dim, hidden_dim, batch_size =1, output_dim=1, num_layers=1):
+        
         super(LSTM, self).__init__()
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
         self.batch_size = batch_size
         self.num_layers = num_layers
-
-        # Define the LSTM layer
         self.lstm = nn.LSTM(self.input_dim, self.hidden_dim, self.num_layers)
-
-        # Define the output layer
-        self.linear = nn.Linear(self.hidden_dim, output_dim)
+        mlp_dims = [hidden_dim + 34,512, 1]
+        self.mlp = make_mlp(mlp_dims)
 
     def init_hidden(self):
-        # This is what we'll initialise our hidden state as
-        return (torch.zeros(self.num_layers, self.batch_size, self.hidden_dim),
-                torch.zeros(self.num_layers, self.batch_size, self.hidden_dim))
-
-    def forward(self, input):
-        # Forward pass through LSTM layer
-        # shape of lstm_out: [input_size, batch_size, hidden_dim]
-        # shape of self.hidden: (a, b), where a and b both 
-        # have shape (num_layers, batch_size, hidden_dim).
-        lstm_out, self.hidden = self.lstm(input.view(len(input), self.batch_size, -1))
         
-        # Only take the output from the final timetep
-        # Can pass on the entirety of lstm_out to the next layer if it is a seq2seq prediction
-        y_pred = self.linear(lstm_out[-1].view(self.batch_size, -1))
-        return y_pred.view(-1)
+        return (Variable(torch.zeros(self.num_layers, self.batch_size, self.hidden_dim)),Variable(torch.zeros(self.num_layers, self.batch_size, self.hidden_dim)))
 
-model = LSTM(lstm_input_size, h1, batch_size=num_train, output_dim=output_dim, num_layers=num_layers)
+    def forward(self, input1, input2):
+        
+        lstm_out, hidden = self.lstm(input1)
+#         print(hidden[0].view(-1,self.hidden_dim,).size(), input2.view(-1,34).size())
+#         exit()
+
+        mlp_inp = torch.cat( [ hidden[0].view(-1,self.hidden_dim), input2.view(-1,34)], dim=1)
+        mlp_inp = torch.cat([mlp_inp, mlp_inp], dim =0)
+#         print(mlp_inp.size())
+#         exit()
+        y_pred = self.mlp(mlp_inp)
+        return y_pred
+
+model = LSTM(input_dim=35,hidden_dim=64, batch_size=1,output_dim=1, num_layers=1)
 
 loss_fn = torch.nn.MSELoss(size_average=False)
 
-optimiser = torch.optim.Adam(model.parameters(), lr=learning_rate)
+optimiser = torch.optim.Adam(model.parameters(), lr= 0.1)
 
-#####################
-# Train model
-#####################
+# num_epochs = 100
+# block_size = 6
+# num_samples = int(timestep/6)
+# samples = [train[x:x+block_size] for x in np.random.randint(timestep ,size=num_samples)]
 
-hist = np.zeros(num_epochs)
+# for t in range(num_epochs):
+#     for sample in samples:
+#         inp1 = sample[:-1, :].view(1,5,35)
+#         test = sample[[-1],:].view(35,1)
+#         inp2 = test[:-1,:]
+#         model.hidden = model.init_hidden()
+#         optimiser.zero_grad()
+#         y_pred = model(inp1.float(), inp2.float())
+#         loss = loss_fn(y_pred, test[34].data)
+#         if t % 10 == 0:
+#             print("Epoch ", t, "MSE: ", loss.item())
+#         loss.backward()
+#         optimiser.step()
+        
+num_epochs = 2
 
-for t in range(num_epochs):
-    # Initialise hidden state
-    # Don't do this if you want your LSTM to be stateful
+
+for i in train:
+#         print(i)
+#         print(i+1)
+#         exit()
+    inp1 = i.view(1,1,35)
+    test = (i+1).view(35,1)
+    inp2 = test[:-1,:]
     model.hidden = model.init_hidden()
-    
-    # Forward pass
-    y_pred = model(X_train)
-
-    loss = loss_fn(y_pred, y_train)
-    if t % 100 == 0:
-        print("Epoch ", t, "MSE: ", loss.item())
-    hist[t] = loss.item()
-
-    # Zero out gradient, else they will accumulate between epochs
+    y_pred = model(inp1.float(), inp2.float())
+    test2 = torch.cat([test[34], test[34]], dim =0).view(2,1)
+    loss = loss_fn(y_pred, test2.float())
+    print("MSE: ", loss.item())
     optimiser.zero_grad()
-
-    # Backward pass
     loss.backward()
-
-    # Update parameters
     optimiser.step()

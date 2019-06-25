@@ -12,4 +12,4 @@ for i in range(1,int(len(oct_data)/35)):
     start = 35*i
     end = start + 35
     ans = np.append(ans, np.array([oct_data.iloc[ start:end, 2].values]), axis =0)
-np.savetxt('lstminput.txt', ans, fmt='%d')  
+np.savetxt('lstminput.txt', ans, delimiter = "\t", fmt='%d')  
