@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 import time
-
+import random
 from collections import defaultdict
 
 import torch
@@ -183,7 +183,7 @@ def main(args):
     d_loss_fn = gan_d_loss
 
     optimizer_g = optim.Adam(generator.parameters(), lr=args.g_learning_rate)
-    optimizer_d = optim.Adam(discriminator.parameters(), lr=args.d_learning_rate)
+    optimizer_d = optim.SGD(discriminator.parameters(), lr=args.d_learning_rate)
 
     # Maybe restore from checkpoint
     restore_path = None
@@ -394,10 +394,14 @@ def discriminator_step(
     traj_real_rel = torch.cat([obs_traj_rel, pred_traj_gt_rel], dim=0)
     traj_fake = torch.cat([obs_traj, pred_traj_fake], dim=0)
     traj_fake_rel = torch.cat([obs_traj_rel, pred_traj_fake_rel], dim=0)
-
-    scores_fake = discriminator(traj_fake, traj_fake_rel, seq_start_end)
-    scores_real = discriminator(traj_real, traj_real_rel, seq_start_end)
-
+    flag = rand88()
+    if flag ==1:
+        scores_fake = discriminator(traj_fake, traj_fake_rel, seq_start_end)
+        scores_real = discriminator(traj_real, traj_real_rel, seq_start_end)
+    elif flag == 0:
+        scores_fake = discriminator(traj_real, traj_real_rel, seq_start_end)
+        scores_real = discriminator(traj_fake, traj_fake_rel, seq_start_end)
+    
     # Compute loss with optional gradient penalty
     data_loss = d_loss_fn(scores_real, scores_fake)
 #     print(data_loss)
@@ -417,6 +421,12 @@ def discriminator_step(
     return losses
 
 
+
+def rand50():
+    flag = [0,1]
+    return random.choice(flag) & 1
+def rand88(): 
+    return rand50() | rand50() | rand50()
 def generator_step(
     args, batch, generator, discriminator, g_loss_fn, optimizer_g
 ):
@@ -457,10 +467,15 @@ def generator_step(
         losses['G_l2_loss_rel'] = g_l2_loss_sum_rel.item()
         loss += g_l2_loss_sum_rel
 
+    traj_real = torch.cat([obs_traj, pred_traj_gt], dim=0)
+    traj_real_rel = torch.cat([obs_traj_rel, pred_traj_gt_rel], dim=0)
     traj_fake = torch.cat([obs_traj, pred_traj_fake], dim=0)
     traj_fake_rel = torch.cat([obs_traj_rel, pred_traj_fake_rel], dim=0)
-
-    scores_fake = discriminator(traj_fake, traj_fake_rel, seq_start_end)
+    flag = rand88()
+    if flag ==1:
+        scores_fake = discriminator(traj_fake, traj_fake_rel, seq_start_end)
+    elif flag == 0:
+        scores_fake = discriminator(traj_real, traj_real_rel, seq_start_end)
     discriminator_loss = g_loss_fn(scores_fake)
 
     loss += discriminator_loss
