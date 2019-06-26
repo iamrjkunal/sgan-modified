@@ -171,7 +171,9 @@ class Decoder(nn.Module):
             if self.pool_every_timestep:
                 decoder_h = state_tuple[0]
                 pool_h = self.pool_net(decoder_h, seq_start_end, curr_pos)
-                decoder_h = torch.cat(
+                print(decoder_h.size(), pool_h.size())
+                exit()
+                decoder_h = torch.cat(i
                     [decoder_h.view(-1, self.h_dim), pool_h], dim=1)
                 decoder_h = self.mlp(decoder_h)
                 decoder_h = torch.unsqueeze(decoder_h, 0)
