@@ -1,8 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-oct_data = pd.read_csv('oct_data.txt', delimiter= "\t", header =None)
-
+dataset = np.loadtxt("lstminput.txt", delimiter='\t')
 
 
 
