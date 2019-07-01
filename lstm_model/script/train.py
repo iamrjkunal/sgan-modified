@@ -1,18 +1,25 @@
 import os
 import numpy as np
 import pandas as pd
+import argparse
 import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
 torch.backends.cudnn.deterministic = True
 
-oct_data = np.loadtxt("lstminput.txt", delimiter='\t')
+oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--time_step', default=3, type=int)
+parser.add_argument('--batch_size', default=10, type=int)
+
+args = parser.parse_args()
+unfold_timestep = args.time_step
+total_timestep = unfold_timestep + 1
+batch_size = args.batch_size
 
 def getbatch():
-    unfold_timestep = 3
-    total_timestep = unfold_timestep + 1
-    batch_size = 10
     
     batch_sample =random.sample(range(0, oct_data.shape[0]-total_timestep), batch_size)
     list_top =[]
@@ -35,7 +42,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=35, hid_dim = 64 , n_layers =1, dropout = 0):
+    def __init__(self, input_dim=35, hid_dim = 128 , n_layers =1, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -60,7 +67,7 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =34, output_dim =1, hid_dim =64, n_layers =1, dropout =0):
+    def __init__(self, input_dim =34, output_dim =1, hid_dim =128, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -187,19 +194,16 @@ best_valid_loss = float('inf')
 train_num_batches = 1000
 valid_num_batches = 200
 test_num_batches = 400
-i =1
+
 for epoch in range(N_EPOCHS):  
-    if i==1:
-        break     
+      
     train_loss = train(model, train_num_batches, optimizer, criterion, CLIP)
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        torch.save(model.state_dict(), 'sensor_lstm_3ts.pt')
+        checkout = 'sensor_lstm' + str(unfold_timestep) + 'ts.pt'
+        torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
     print("Val Loss:", valid_loss)
 
-model.load_state_dict(torch.load('sensor_lstm_3ts.pt'))
-test_loss = evaluate(model, test_num_batches, criterion)
-print("Test Loss:", test_loss)
