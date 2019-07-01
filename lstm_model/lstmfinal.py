@@ -10,7 +10,7 @@ torch.backends.cudnn.deterministic = True
 oct_data = np.loadtxt("lstminput.txt", delimiter='\t')
 
 def getbatch():
-    unfold_timestep = 5
+    unfold_timestep = 3
     total_timestep = unfold_timestep + 1
     batch_size = 10
     
@@ -100,8 +100,8 @@ class Seq2Seq(nn.Module):
         return output
 
 
-enc = Encoder()
-dec = Decoder()
+enc = Encoder(n_layers =1)
+dec = Decoder(n_layers =1)
 model = Seq2Seq(enc, dec, device).to(device)
 
 def init_weights(m):
@@ -112,7 +112,7 @@ model.apply(init_weights)
 
 
 
-optimizer = optim.Adam(model.parameters(), lr= 0.1)
+optimizer = optim.Adam(model.parameters())
 criterion = nn.MSELoss(size_average=False)
 
 
@@ -124,13 +124,21 @@ def train(model,train_num_batches, optimizer, criterion, clip):
     
     for i in range(0,train_num_batches):
         batch_iter = getbatch()
+        if torch.cuda.is_available():
+            batch_iter = batch_iter.cuda()
         encode_inp = batch_iter[:-1,:,:]
         decode_inp = batch_iter[[-1],:,:-1]
-        real_output = batch_iter[[-1],:,[-1]]
+        real_output = batch_iter[[-1],:,[-1]].view(-1,1)
         optimizer.zero_grad()
         
-        predicted_output = model(encode_inp.float(), decode_inp.float())
+        if torch.cuda.is_available():
+            encode_inp = encode_inp.cuda()
+            decode_inp = decode_inp.cuda()
+            real_output = real_output.cuda()
         
+        predicted_output = model(encode_inp.float(), decode_inp.float())
+#         print(predicted_output.size(), real_output.view(-1,1).size())
+#         exit()
         loss = criterion(predicted_output.float(), real_output.float())
         
         loss.backward()
@@ -153,9 +161,16 @@ def evaluate(model, valid_num_batches, criterion):
     
         for i in range(0,valid_num_batches):
             batch_iter = getbatch()
+            if torch.cuda.is_available():
+                batch_iter = batch_iter.cuda()
+
             encode_inp = batch_iter[:-1,:,:]
             decode_inp = batch_iter[[-1],:,:-1]
-            real_output = batch_iter[[-1],:,[-1]]
+            real_output = batch_iter[[-1],:,[-1]].view(-1,1)
+            if torch.cuda.is_available():
+                encode_inp = encode_inp.cuda()
+                decode_inp = decode_inp.cuda()
+                real_output = real_output.cuda()
         
             predicted_output = model(encode_inp.float(), decode_inp.float())
             loss = criterion(predicted_output.float(), real_output.float())
@@ -169,19 +184,22 @@ CLIP = 1
 
 best_valid_loss = float('inf')
 
-train_num_batches = 100
-valid_num_batches = 20
-test_num_batches = 40
-
-for epoch in range(N_EPOCHS):       
+train_num_batches = 1000
+valid_num_batches = 200
+test_num_batches = 400
+i =1
+for epoch in range(N_EPOCHS):  
+    if i==1:
+        break     
     train_loss = train(model, train_num_batches, optimizer, criterion, CLIP)
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        torch.save(model.state_dict(), 'sensor_lstm.pt')
+        torch.save(model.state_dict(), 'sensor_lstm_3ts.pt')
+    print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
     print("Val Loss:", valid_loss)
 
-model.load_state_dict(torch.load('sensor_lstm.pt'))
+model.load_state_dict(torch.load('sensor_lstm_3ts.pt'))
 test_loss = evaluate(model, test_num_batches, criterion)
 print("Test Loss:", test_loss)
