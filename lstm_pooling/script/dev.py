@@ -60,28 +60,73 @@ def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=35, hid_dim = 64 , n_layers =1, dropout = 0):
+    def __init__(self, input_dim=35, embedding_dim = 64, hid_dim = 64 , mlp_dim = 512, n_layers =1, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
         self.hid_dim = hid_dim
         self.n_layers = n_layers
         self.dropout = dropout
-        
+        self.embedding_dim = embedding_dim
         self.rnn = nn.LSTM(input_dim, hid_dim, n_layers, dropout = dropout)
         self.dropout = nn.Dropout(dropout)
+        
+        self.pool_net = PoolHiddenNet(
+                    embedding_dim=self.embedding_dim,
+                    hid_dim=self.h_dim,
+                    mlp_dim=mlp_dim,
+                    poll_dim=poll_dim,
+                    activation=activation,
+                    batch_norm=batch_norm,
+                    dropout=dropout
+                )
+        self.spatial_embedding = nn.Linear(1, embedding_dim)
+        
+        mlp_dims = [hid_dim + poll_dim, mlp_dim, hid_dim]
+        self.mlp = make_mlp( mlp_dims, activation=activation, batch_norm=batch_norm, dropout=dropout )
+        
+        self.hidden = torch.zeros( self.n_layers, k+1, self.hid_dim ).to(self.device)
+        self.cell = torch.zeros( self.n_layers, k+1, self.hid_dim ).to(self.device)
         
     def forward(self, src):
         
         #src = [src sent len, batch size, input_dim]
-        
-        outputs, (hidden, cell) = self.rnn(src)
-        
+        ts_len = src.size()[0]
+    
+        for t in range(0, ts_len):    
+            outputs, (self.hidden, self.cell) = self.rnn(src[t,:,:], (self.hidden, self.cell))
+            pool_h = self.pool_net(self.hidden, src)
+
+            
         #outputs = [src sent len, batch size, hid dim]
         #hidden = [n layers, batch size, hid dim]
         #cell = [n layers, batch size, hid dim]
         #outputs are always from the top hidden layer
-        return hidden, cell
+        return self.hidden, self.cell
+    
+    
+        for _ in range(self.seq_len):
+            output, state_tuple = self.decoder(decoder_input, state_tuple)
+            rel_pos = self.hidden2pos(output.view(-1, self.h_dim))
+            curr_pos = rel_pos + last_pos
+
+            if self.pool_every_timestep:
+                decoder_h = state_tuple[0]
+                pool_h = self.pool_net(decoder_h, seq_start_end, curr_pos)
+                decoder_h = torch.cat( [decoder_h.view(-1, self.h_dim), pool_h], dim=1)
+                decoder_h = self.mlp(decoder_h)
+                decoder_h = torch.unsqueeze(decoder_h, 0)
+                state_tuple = (decoder_h, state_tuple[1])
+
+            embedding_input = rel_pos
+
+            decoder_input = self.spatial_embedding(embedding_input)
+            decoder_input = decoder_input.view(1, batch, self.embedding_dim)
+            pred_traj_fake_rel.append(rel_pos.view(batch, -1))
+            last_pos = curr_pos
+
+        pred_traj_fake_rel = torch.stack(pred_traj_fake_rel, dim=0)
+        return pred_traj_fake_rel, state_tuple[0]
 
 
 class Decoder(nn.Module):
@@ -111,18 +156,18 @@ class Decoder(nn.Module):
 class PoolHiddenNet(nn.Module):
     """Pooling module as proposed in our paper"""
     def __init__(
-        self, embedding_dim=64, h_dim=64, mlp_dim=1024, bottleneck_dim=1024,
+        self, embedding_dim=64, h_dim=64, mlp_dim=512, poll_dim=1024,
         activation='relu', batch_norm=True, dropout=0.0
     ):
         super(PoolHiddenNet, self).__init__()
 
         self.mlp_dim = 1024
         self.h_dim = h_dim
-        self.bottleneck_dim = bottleneck_dim
+        self.poll_dim = poll_dim
         self.embedding_dim = embedding_dim
 
         mlp_pre_dim = embedding_dim + h_dim
-        mlp_pre_pool_dims = [mlp_pre_dim, 512, bottleneck_dim]
+        mlp_pre_pool_dims = [mlp_pre_dim, 512, poll_dim]
 
         self.spatial_embedding = nn.Linear(1, embedding_dim)
         self.mlp_pre_pool = make_mlp(
@@ -151,7 +196,7 @@ class PoolHiddenNet(nn.Module):
         - seq_start_end: A list of tuples which delimit sequences within batch
         - end_pos: Tensor of shape (batch, 2)
         Output:
-        - pool_h: Tensor of shape (batch, bottleneck_dim)
+        - pool_h: Tensor of shape (batch, poll_dim)
         """
         pool_h = []
         for _, (start, end) in enumerate(seq_start_end):
@@ -187,7 +232,10 @@ class Seq2Seq(nn.Module):
     def forward(self, encode_inp, decode_inp):
         
         #last hidden state of the encoder is used as the initial hidden state of the decoder
+        
+    
         hidden, cell = self.encoder(encode_inp)
+        
         
         output, hidden, cell = self.decoder(decode_inp, hidden, cell)
         return output
