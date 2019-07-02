@@ -26,6 +26,7 @@ k = 5
 sensor_list = random.sample(range(0, 34), k)
 sensor_list.sort()
 sensor_list.append(34)
+unfold_timestep = 3
 def getbatch():
     unfold_timestep = 3
     total_timestep = unfold_timestep + 1
@@ -60,7 +61,7 @@ def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=35, embedding_dim = 64, hid_dim = 64 , mlp_dim = 512, n_layers =1, dropout = 0):
+    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0, device = device):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -70,19 +71,20 @@ class Encoder(nn.Module):
         self.embedding_dim = embedding_dim
         self.rnn = nn.LSTM(input_dim, hid_dim, n_layers, dropout = dropout)
         self.dropout = nn.Dropout(dropout)
+        self.device = device
         
         self.pool_net = PoolHiddenNet(
                     embedding_dim=self.embedding_dim,
-                    hid_dim=self.h_dim,
+                    hid_dim=self.hid_dim,
                     mlp_dim=mlp_dim,
-                    poll_dim=poll_dim,
+                    pool_dim=pool_dim,
                     activation=activation,
                     batch_norm=batch_norm,
                     dropout=dropout
                 )
         self.spatial_embedding = nn.Linear(1, embedding_dim)
         
-        mlp_dims = [hid_dim + poll_dim, mlp_dim, hid_dim]
+        mlp_dims = [hid_dim + pool_dim, mlp_dim, hid_dim]
         self.mlp = make_mlp( mlp_dims, activation=activation, batch_norm=batch_norm, dropout=dropout )
         
         self.hidden = torch.zeros( self.n_layers, k+1, self.hid_dim ).to(self.device)
@@ -94,43 +96,19 @@ class Encoder(nn.Module):
         ts_len = src.size()[0]
     
         for t in range(0, ts_len):    
-            outputs, (self.hidden, self.cell) = self.rnn(src[t,:,:], (self.hidden, self.cell))
-            pool_h = self.pool_net(self.hidden, src)
-
-            
+            outputs, (self.hidden, self.cell) = self.rnn(src[t,:,:].view(1,k+1,1), (self.hidden, self.cell))
+            pool_h = self.pool_net(self.hidden, src[t,:,:])
+            mlp_inp = torch.cat( [self.hidden.view(-1, self.hid_dim), pool_h], dim=1)
+            mlp_out = self.mlp(mlp_inp)
+            self.hidden = torch.unsqueeze(mlp_out, 0)      
         #outputs = [src sent len, batch size, hid dim]
         #hidden = [n layers, batch size, hid dim]
         #cell = [n layers, batch size, hid dim]
         #outputs are always from the top hidden layer
         return self.hidden, self.cell
-    
-    
-        for _ in range(self.seq_len):
-            output, state_tuple = self.decoder(decoder_input, state_tuple)
-            rel_pos = self.hidden2pos(output.view(-1, self.h_dim))
-            curr_pos = rel_pos + last_pos
-
-            if self.pool_every_timestep:
-                decoder_h = state_tuple[0]
-                pool_h = self.pool_net(decoder_h, seq_start_end, curr_pos)
-                decoder_h = torch.cat( [decoder_h.view(-1, self.h_dim), pool_h], dim=1)
-                decoder_h = self.mlp(decoder_h)
-                decoder_h = torch.unsqueeze(decoder_h, 0)
-                state_tuple = (decoder_h, state_tuple[1])
-
-            embedding_input = rel_pos
-
-            decoder_input = self.spatial_embedding(embedding_input)
-            decoder_input = decoder_input.view(1, batch, self.embedding_dim)
-            pred_traj_fake_rel.append(rel_pos.view(batch, -1))
-            last_pos = curr_pos
-
-        pred_traj_fake_rel = torch.stack(pred_traj_fake_rel, dim=0)
-        return pred_traj_fake_rel, state_tuple[0]
-
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =34, output_dim =1, hid_dim =64, n_layers =1, dropout =0):
+    def __init__(self, input_dim =1, output_dim =1, hid_dim =64, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -156,18 +134,18 @@ class Decoder(nn.Module):
 class PoolHiddenNet(nn.Module):
     """Pooling module as proposed in our paper"""
     def __init__(
-        self, embedding_dim=64, h_dim=64, mlp_dim=512, poll_dim=1024,
+        self, embedding_dim=64, hid_dim=64, mlp_dim=512, pool_dim=64,
         activation='relu', batch_norm=True, dropout=0.0
     ):
         super(PoolHiddenNet, self).__init__()
 
-        self.mlp_dim = 1024
-        self.h_dim = h_dim
-        self.poll_dim = poll_dim
+        self.mlp_dim = mlp_dim
+        self.hid_dim = hid_dim
+        self.pool_dim = pool_dim
         self.embedding_dim = embedding_dim
 
-        mlp_pre_dim = embedding_dim + h_dim
-        mlp_pre_pool_dims = [mlp_pre_dim, 512, poll_dim]
+        mlp_pre_dim = embedding_dim + hid_dim
+        mlp_pre_pool_dims = [mlp_pre_dim, 512, pool_dim]
 
         self.spatial_embedding = nn.Linear(1, embedding_dim)
         self.mlp_pre_pool = make_mlp(
@@ -189,38 +167,36 @@ class PoolHiddenNet(nn.Module):
         tensor = tensor.view(-1, col_len)
         return tensor
 
-    def forward(self, h_states, seq_start_end, end_pos):
+    def forward(self, h_states, src):
         """
         Inputs:
-        - h_states: Tensor of shape (num_layers, batch, h_dim)
+        - h_states: Tensor of shape (num_layers, batch, hid_dim)
         - seq_start_end: A list of tuples which delimit sequences within batch
         - end_pos: Tensor of shape (batch, 2)
         Output:
-        - pool_h: Tensor of shape (batch, poll_dim)
+        - pool_h: Tensor of shape (batch, pool_dim)
         """
         pool_h = []
-        for _, (start, end) in enumerate(seq_start_end):
-            start = start.item()
-            end = end.item()
-            num_ped = end - start
-            curr_hidden = h_states.view(-1, self.h_dim)[start:end]
-            curr_end_pos = end_pos[start:end]
-            # Repeat -> H1, H2, H1, H2
-            curr_hidden_1 = curr_hidden.repeat(num_ped, 1)
-            # Repeat position -> P1, P2, P1, P2
-            curr_end_pos_1 = curr_end_pos.repeat(num_ped, 1)
-            # Repeat position -> P1, P1, P2, P2
-            curr_end_pos_2 = self.repeat(curr_end_pos, num_ped)
-            curr_rel_pos = curr_end_pos_1 - curr_end_pos_2
-            curr_rel_embedding = self.spatial_embedding(curr_rel_pos)
-            mlp_h_input = torch.cat([curr_rel_embedding, curr_hidden_1], dim=1)
-            curr_pool_h = self.mlp_pre_pool(mlp_h_input)
-            curr_pool_h = curr_pool_h.view(num_ped, num_ped, -1).max(1)[0]
-            pool_h.append(curr_pool_h)
+        
+        num_sensors = h_states.size()[1]
+        curr_hidden = h_states.view(-1, self.hid_dim)
+        curr_end_pos = src.view(num_sensors, 1)
+        # Repeat -> H1, H2, H1, H2
+        curr_hidden_1 = curr_hidden.repeat(num_sensors, 1)
+        # Repeat position -> P1, P2, P1, P2
+        curr_end_pos_1 = curr_end_pos.repeat(num_sensors, 1)
+        # Repeat position -> P1, P1, P2, P2
+        curr_end_pos_2 = self.repeat(curr_end_pos, num_sensors)
+        curr_rel_pos = curr_end_pos_1 - curr_end_pos_2
+        curr_rel_embedding = self.spatial_embedding(curr_rel_pos)
+        mlp_h_input = torch.cat([curr_rel_embedding, curr_hidden_1], dim=1)
+        curr_pool_h = self.mlp_pre_pool(mlp_h_input)
+        curr_pool_h = curr_pool_h.view(num_sensors, num_sensors, -1).max(1)[0]
+        pool_h.append(curr_pool_h)
         pool_h = torch.cat(pool_h, dim=0)
         return pool_h
 
-   
+        
 class Seq2Seq(nn.Module):
     def __init__(self, encoder, decoder, device):
         super(Seq2Seq, self).__init__()
@@ -235,14 +211,15 @@ class Seq2Seq(nn.Module):
         
     
         hidden, cell = self.encoder(encode_inp)
-        
-        
+        #hidden = [n layers, batch size, hid dim]
+        hidden = hidden[:,:-1,:]
+        cell = cell[:,:-1,:]
         output, hidden, cell = self.decoder(decode_inp, hidden, cell)
         return output
 
 
-enc = Encoder(n_layers =1)
-dec = Decoder(n_layers =1)
+enc = Encoder()
+dec = Decoder()
 model = Seq2Seq(enc, dec, device).to(device)
 
 def init_weights(m):
@@ -279,8 +256,8 @@ def train(model,train_num_batches, optimizer, criterion, clip):
         if torch.cuda.is_available():
             batch_iter = batch_iter.cuda()
         encode_inp = batch_iter[:-1,:,:]
-        decode_inp = batch_iter[[-1],:,:-1]
-        real_output = batch_iter[[-1],:,[-1]].view(-1,1)
+        decode_inp = batch_iter[[-1],:-1,:]
+        real_output = batch_iter[[-1],[-1],:].view(1)
         optimizer.zero_grad()
         
         if torch.cuda.is_available():
@@ -315,10 +292,9 @@ def evaluate(model, valid_num_batches, criterion):
             batch_iter = getbatch()
             if torch.cuda.is_available():
                 batch_iter = batch_iter.cuda()
-
             encode_inp = batch_iter[:-1,:,:]
-            decode_inp = batch_iter[[-1],:,:-1]
-            real_output = batch_iter[[-1],:,[-1]].view(-1,1)
+            decode_inp = batch_iter[[-1],:-1,:]
+            real_output = batch_iter[[-1],[-1],:].view(1)
             if torch.cuda.is_available():
                 encode_inp = encode_inp.cuda()
                 decode_inp = decode_inp.cuda()
@@ -346,7 +322,7 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm' + str(unfold_timestep) + 'ts.pt'
+        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'ts.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
