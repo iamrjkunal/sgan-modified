@@ -25,9 +25,8 @@ oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
 k = 5
 sensor_list = random.sample(range(0, 34), k)
 sensor_list.sort()
-
 sensor_list.append(34)
-with open("sensor_list_dev.txt", "w") as file:
+with open("sensor_list_dev1.txt", "w") as file:
     file.write(str(sensor_list))
 unfold_timestep = 10
 def getbatch():
@@ -64,7 +63,7 @@ def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0):
+    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0, device = device):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -104,7 +103,7 @@ class Encoder(nn.Module):
             mlp_inp = torch.cat( [self.hidden.view(-1, self.hid_dim), pool_h], dim=1)
             mlp_out = self.mlp(mlp_inp)
             self.hidden = torch.unsqueeze(mlp_out, 0)
-        self.hidden = self.hidden.detach() 
+        self.hidden= self.hidden.detach()
         self.cell = self.cell.detach()
         #outputs = [src sent len, batch size, hid dim]
         #hidden = [n layers, batch size, hid dim]
@@ -113,7 +112,7 @@ class Encoder(nn.Module):
         return self.hidden, self.cell
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =1, embedding_dim=64,output_dim =1, hid_dim =64, n_layers =1, dropout =0):
+    def __init__(self, input_dim =1, embedding_dim=64,output_dim =1, hid_dim =64, n_layers =1, activation='relu', batch_norm=True,dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -123,6 +122,8 @@ class Decoder(nn.Module):
         self.dropout = dropout
 
         self.rnn = nn.LSTM(input_dim, hid_dim, n_layers, dropout = dropout)
+        mlp_dims = [2*hid_dim, 512, hid_dim]
+        self.mlp = make_mlp( mlp_dims, activation=activation, batch_norm=batch_norm, dropout=dropout )
         self.spatial_embedding = nn.Linear(1, embedding_dim).cuda()
         self.out = nn.Linear((k+1)*hid_dim, output_dim)
         
@@ -135,7 +136,10 @@ class Decoder(nn.Module):
 #         print(output.size(), output.squeeze(0).size())
  #       prediction = self.out(output.squeeze(0)[[-1],:])
         emb = self.spatial_embedding(input)
-        prediction = self.out(torch.cat([emb.squeeze(0), hidden.squeeze(0)[[-1],:]], dim=0).view(-1))
+        mlp_inp = torch.cat([emb.squeeze(0), hidden.squeeze(0)[:-1,:]], dim=1)
+        hid_temp = self.mlp(mlp_inp)
+        hid_final = torch.cat([hid_temp, hidden.squeeze(0)[[-1],:]], dim=0).view(-1)
+        prediction = self.out(hid_final)
 #         print(emb.squeeze(0).size(), hidden.squeeze(0)[[-1],:].size())
 #         print(torch.cat([emb.squeeze(0), hidden.squeeze(0)[[-1],:]], dim=0).view(-1).size())
 #         exit()
@@ -337,7 +341,7 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool.pt'
+        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool1.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
