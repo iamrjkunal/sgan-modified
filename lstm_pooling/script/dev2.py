@@ -27,11 +27,11 @@ sensor_list = random.sample(range(0, 34), k)
 sensor_list.sort()
 
 sensor_list.append(34)
-with open("sensor_list_dev.txt", "w") as file:
+with open("sensor_list_dev2.txt", "w") as file:
     file.write(str(sensor_list))
-unfold_timestep = 10
+unfold_timestep = 1
 def getbatch():
-    unfold_timestep = 10
+    unfold_timestep = 1
     total_timestep = unfold_timestep + 1
     sample_t0 =random.sample(range(0, oct_data.shape[0]-total_timestep), 1)[0]
     lis =[]
@@ -337,7 +337,7 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool.pt'
+        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool2.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
