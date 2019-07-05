@@ -6,9 +6,16 @@ import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as pp
 torch.backends.cudnn.deterministic = True
 
 oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
+for i in range(0,35):
+    ar = oct_data[:,i]
+    pp.plot(ar)
+    pp.show()
+    print(np.std(ar))
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--time_step', default=3, type=int)
