@@ -42,7 +42,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=35, hid_dim = 128 , n_layers =1, dropout = 0):
+    def __init__(self, input_dim=35, hid_dim = 64 , n_layers =1, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -67,7 +67,7 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =34, output_dim =1, hid_dim =128, n_layers =1, dropout =0):
+    def __init__(self, input_dim =34, output_dim =1, hid_dim =64, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -121,7 +121,6 @@ model.apply(init_weights)
 
 optimizer = optim.Adam(model.parameters())
 criterion = nn.MSELoss(size_average=False)
-
 
 def train(model,train_num_batches, optimizer, criterion, clip):
     
