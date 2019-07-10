@@ -1,36 +1,47 @@
 import os
 import numpy as np
 import pandas as pd
-#import argparse
+import argparse
 import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import time
+
+def epoch_time(start_time, end_time):
+    elapsed_time = end_time - start_time
+    elapsed_mins = int(elapsed_time / 60)
+    elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
+    return elapsed_mins, elapsed_secs
+
 torch.backends.cudnn.deterministic = True
 
 oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
-# =============================================================================
-# parser = argparse.ArgumentParser()
-# 
-# parser.add_argument('--time_step', default=3, type=int)
-# parser.add_argument('--batch_size', default=10, type=int)
-# 
-# args = parser.parse_args()
-# unfold_timestep = args.time_step
-# total_timestep = unfold_timestep + 1
-# batch_size = args.batch_size
-# 
-# =============================================================================
-#k = random.sample(range(1, 34), 1)[0]
-k = 5
-# sensor_list = random.sample(range(0, 34), k)
-# sensor_list.sort()
-# sensor_list.append(34)
-# with open("sensor_list_dev1.txt", "w") as file:
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--num_sensors', default=5, type=int)
+parser.add_argument('--sensor_no', type=int)
+
+args = parser.parse_args()
+num_sensors = args.num_sensors
+k = num_sensors
+sensor_no = args.sensor_no
+# sensors = [i for j in (range(0,sensor_no),range(sensor_no+1, 35)) for i in j]
+
+# sensor_list = random.sample(sensors, num_sensors)
+# sensor_list.append(sensor_no)
+# save = "sensor_list_for" + str(sensor_no) + ".txt"
+# with open(save, "w") as file:
 #     file.write(str(sensor_list))
 
-with open("sensor_list_dev1.txt", "r") as file:
+#Loading list
+load = "trained_model/sensor_list_for_"+ str(sensor_no) + ".txt"
+with open(load, "r") as file:
     sensor_list = eval(file.readline())
+
+    
 unfold_timestep = 10
 def getbatch():
     unfold_timestep = 10
@@ -66,7 +77,7 @@ def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0, device = device):
+    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -106,7 +117,7 @@ class Encoder(nn.Module):
             mlp_inp = torch.cat( [self.hidden.view(-1, self.hid_dim), pool_h], dim=1)
             mlp_out = self.mlp(mlp_inp)
             self.hidden = torch.unsqueeze(mlp_out, 0)
-        self.hidden= self.hidden.detach()
+        self.hidden = self.hidden.detach() 
         self.cell = self.cell.detach()
         #outputs = [src sent len, batch size, hid dim]
         #hidden = [n layers, batch size, hid dim]
@@ -115,7 +126,7 @@ class Encoder(nn.Module):
         return self.hidden, self.cell
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =1, embedding_dim=64,output_dim =1, hid_dim =64, n_layers =1, activation='relu', batch_norm=True,dropout =0):
+    def __init__(self, input_dim =1, embedding_dim=64,output_dim =1, hid_dim =64, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -125,8 +136,6 @@ class Decoder(nn.Module):
         self.dropout = dropout
 
         self.rnn = nn.LSTM(input_dim, hid_dim, n_layers, dropout = dropout)
-        mlp_dims = [2*hid_dim, 512, hid_dim]
-        self.mlp = make_mlp( mlp_dims, activation=activation, batch_norm=batch_norm, dropout=dropout )
         self.spatial_embedding = nn.Linear(1, embedding_dim).cuda()
         self.out = nn.Linear((k+1)*hid_dim, output_dim)
         
@@ -139,10 +148,7 @@ class Decoder(nn.Module):
 #         print(output.size(), output.squeeze(0).size())
  #       prediction = self.out(output.squeeze(0)[[-1],:])
         emb = self.spatial_embedding(input)
-        mlp_inp = torch.cat([emb.squeeze(0), hidden.squeeze(0)[:-1,:]], dim=1)
-        hid_temp = self.mlp(mlp_inp)
-        hid_final = torch.cat([hid_temp, hidden.squeeze(0)[[-1],:]], dim=0).view(-1)
-        prediction = self.out(hid_final)
+        prediction = self.out(torch.cat([emb.squeeze(0), hidden.squeeze(0)[[-1],:]], dim=0).view(-1))
 #         print(emb.squeeze(0).size(), hidden.squeeze(0)[[-1],:].size())
 #         print(torch.cat([emb.squeeze(0), hidden.squeeze(0)[[-1],:]], dim=0).view(-1).size())
 #         exit()
@@ -341,17 +347,21 @@ flag =0
 for epoch in range(N_EPOCHS):  
     if flag ==0:
         break
+    start_time = time.time()
     train_loss = train(model, train_num_batches, optimizer, criterion, CLIP)
     valid_loss = evaluate(model, valid_num_batches, criterion)    
+    end_time = time.time()
+    epoch_mins, epoch_secs = epoch_time(start_time, end_time)
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool1.pt'
+        checkout = 'trained_model/sensor_lstm_for_' + str(sensor_no) + '.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
+    print('Time:{}m {}s'.format(epoch_mins, epoch_secs))
     print("Train Loss :", train_loss)
     print("Val Loss:", valid_loss)
 
-model.load_state_dict(torch.load('sensor_lstm_10tspool1.pt'))
+model.load_state_dict(torch.load('trained_model/sensor_lstm_for_'+ str(sensor_no) + '.pt'))
 best_test_loss = float('inf')
 for i in range(5):
     test_loss = evaluate(model, test_num_batches, criterion)
