@@ -22,16 +22,23 @@ oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
 # 
 # =============================================================================
 #k = random.sample(range(1, 34), 1)[0]
-k = 5
-sensor_list = random.sample(range(0, 34), k)
-sensor_list.sort()
 
-sensor_list.append(34)
-with open("sensor_list_dev2.txt", "w") as file:
-    file.write(str(sensor_list))
-unfold_timestep = 1
+
+k = 5
+#sensor_list = random.sample(range(0, 34), k)
+#sensor_list.sort()
+
+#sensor_list.append(34)
+#with open("sensor_list_dev2.txt", "w") as file:
+#    file.write(str(sensor_list))
+
+with open('sensor_list_dev.txt', 'r') as file:
+    sensor_list = eval(file.readline())
+print(sensor_list)
+exit()
+unfold_timestep = 3
 def getbatch():
-    unfold_timestep = 1
+    unfold_timestep = 3
     total_timestep = unfold_timestep + 1
     sample_t0 =random.sample(range(0, oct_data.shape[0]-total_timestep), 1)[0]
     lis =[]

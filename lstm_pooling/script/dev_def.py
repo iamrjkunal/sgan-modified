@@ -27,8 +27,8 @@ sensor_list = random.sample(range(0, 34), k)
 sensor_list.sort()
 
 sensor_list.append(34)
-with open("sensor_list_dev3.txt", "w") as file:
-    file.write(str(sensor_list))
+#with open("sensor_list_dev.txt", "w") as file:
+#    file.write(str(sensor_list))
 unfold_timestep = 3
 def getbatch():
     unfold_timestep = 3
@@ -64,7 +64,7 @@ def make_mlp(dim_list, activation='relu', batch_norm=True, dropout=0):
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=1, embedding_dim = 64, hid_dim = 64, pool_dim= 64, mlp_dim = 512, n_layers = 1, activation='relu', batch_norm=True, dropout = 0):
+    def __init__(self, input_dim=1, embedding_dim = 32, hid_dim = 32, pool_dim= 32, mlp_dim = 64, n_layers = 1, activation='relu', batch_norm=True, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -113,7 +113,7 @@ class Encoder(nn.Module):
         return self.hidden, self.cell
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =1, embedding_dim=64,output_dim =1, hid_dim =64, n_layers =1, dropout =0):
+    def __init__(self, input_dim =1, embedding_dim=32,output_dim =1, hid_dim =32, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -146,7 +146,7 @@ class Decoder(nn.Module):
 class PoolHiddenNet(nn.Module):
     """Pooling module as proposed in our paper"""
     def __init__(
-        self, embedding_dim=64, hid_dim=64, mlp_dim=512, pool_dim=64,
+        self, embedding_dim=32, hid_dim=32, mlp_dim=64, pool_dim=32,
         activation='relu', batch_norm=True, dropout=0.0
     ):
         super(PoolHiddenNet, self).__init__()
@@ -157,7 +157,7 @@ class PoolHiddenNet(nn.Module):
         self.embedding_dim = embedding_dim
 
         mlp_pre_dim = embedding_dim + hid_dim
-        mlp_pre_pool_dims = [mlp_pre_dim, 512, pool_dim]
+        mlp_pre_pool_dims = [mlp_pre_dim, 64, pool_dim]
 
         self.spatial_embedding = nn.Linear(1, embedding_dim).cuda()
         self.mlp_pre_pool = make_mlp(
@@ -337,7 +337,7 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool3.pt'
+        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool_def.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)
