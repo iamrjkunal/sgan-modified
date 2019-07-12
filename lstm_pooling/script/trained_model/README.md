@@ -1,7 +1,7 @@
 ## Folders
-1. 1_hidden_state_dev
-2. mult_hidd_state_dev1
-## Files
+1. 1_hidden_state_dev (contain result of dev.py for sensor no 35)
+2. mult_hidd_state_dev1 (contain result of dev1.py for sensor no 35)
+## Files 
 - sensor_list_for_*.txt (this file contains value of sampled sensors where last element is sensor for which we want to predict)
 - sensor_lstm_for_*.pt (this file is saved model where * denotes sensor no for which we want to predict)
 - sensor_lstm_3tspool3.pt (this file is result of dev3.py)
