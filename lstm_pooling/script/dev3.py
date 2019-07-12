@@ -29,6 +29,14 @@ sensor_list.sort()
 sensor_list.append(34)
 with open("sensor_list_dev3.txt", "w") as file:
     file.write(str(sensor_list))
+<<<<<<< HEAD
+=======
+    
+# Loading list
+# with open("sensor_list_dev3.txt", "r") as file:
+#     sensor_list = eval(file.readline())
+
+>>>>>>> b7554263bd65057dbfd4d0339bb2b5027b906d15
 unfold_timestep = 3
 def getbatch():
     unfold_timestep = 3

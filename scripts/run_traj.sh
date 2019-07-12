@@ -2,7 +2,7 @@ python train.py \
   --dataset_name 'oct_data' \
   --delim tab \
   --d_type 'global' \
-  --pred_len 8 \
+  --pred_len 20 \
   --encoder_h_dim_g 32 \
   --encoder_h_dim_d 48\
   --decoder_h_dim 32 \

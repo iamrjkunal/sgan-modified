@@ -1,61 +1,49 @@
 import os
 import numpy as np
 import pandas as pd
-#import argparse
+import argparse
 import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import time
+
+def epoch_time(start_time, end_time):
+    elapsed_time = end_time - start_time
+    elapsed_mins = int(elapsed_time / 60)
+    elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
+    return elapsed_mins, elapsed_secs
+
 torch.backends.cudnn.deterministic = True
 
 oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
-# =============================================================================
-# parser = argparse.ArgumentParser()
-# 
-# parser.add_argument('--time_step', default=3, type=int)
-# parser.add_argument('--batch_size', default=10, type=int)
-# 
-# args = parser.parse_args()
-# unfold_timestep = args.time_step
-# total_timestep = unfold_timestep + 1
-# batch_size = args.batch_size
-# 
-# =============================================================================
-#k = random.sample(range(1, 34), 1)[0]
 
-<<<<<<< HEAD
 
-k = 5
-#sensor_list = random.sample(range(0, 34), k)
-#sensor_list.sort()
 
-#sensor_list.append(34)
-#with open("sensor_list_dev2.txt", "w") as file:
-#    file.write(str(sensor_list))
+parser = argparse.ArgumentParser()
+parser.add_argument('--num_sensors', default=5, type=int)
+parser.add_argument('--sensor_no', type=int)
 
-with open('sensor_list_dev.txt', 'r') as file:
-    sensor_list = eval(file.readline())
-print(sensor_list)
-exit()
-unfold_timestep = 3
-=======
-# Sampling values
-k = 5
-sensor_list = random.sample(range(0, 34), k)
-sensor_list.sort()
-sensor_list.append(34)
-with open("sensor_list_dev2.txt", "w") as file:
+args = parser.parse_args()
+num_sensors = args.num_sensors
+k = num_sensors
+sensor_no = args.sensor_no
+sensors = [i for j in (range(0,sensor_no),range(sensor_no+1, 35)) for i in j]
+
+sensor_list = random.sample(sensors, num_sensors)
+sensor_list.append(sensor_no)
+save = "trained_model/sensor_list_for_" + str(sensor_no) + ".txt"
+with open(save, "w") as file:
     file.write(str(sensor_list))
 
-# Loading list
-# with open("sensor_list_dev2.txt", "r") as file:
+#Loading list
+# with open("sensor_list_dev_final.txt", "r") as file:
 #     sensor_list = eval(file.readline())
 
-unfold_timestep = 1
-
->>>>>>> b7554263bd65057dbfd4d0339bb2b5027b906d15
+    
+unfold_timestep = 10
 def getbatch():
-    unfold_timestep = 3
+    unfold_timestep = 10
     total_timestep = unfold_timestep + 1
     sample_t0 =random.sample(range(0, oct_data.shape[0]-total_timestep), 1)[0]
     lis =[]
@@ -354,21 +342,25 @@ best_valid_loss = float('inf')
 train_num_batches = 1000
 valid_num_batches = 200
 test_num_batches = 400
-i = 1
+flag =0
 for epoch in range(N_EPOCHS):  
-    if i ==1:
-        break
+#     if flag ==0:
+#         break
+    start_time = time.time()
     train_loss = train(model, train_num_batches, optimizer, criterion, CLIP)
     valid_loss = evaluate(model, valid_num_batches, criterion)    
+    end_time = time.time()
+    epoch_mins, epoch_secs = epoch_time(start_time, end_time)
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'tspool2.pt'
+        checkout = 'trained_model/sensor_lstm_for_' + str(sensor_no) + '.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
+    print('Time:{}m {}s'.format(epoch_mins, epoch_secs))
     print("Train Loss :", train_loss)
     print("Val Loss:", valid_loss)
 
-model.load_state_dict(torch.load('sensor_lstm_1tspool2.pt'))
+model.load_state_dict(torch.load('trained_model/sensor_lstm_for_' + str(sensor_no) + '.pt'))
 best_test_loss = float('inf')
 for i in range(5):
     test_loss = evaluate(model, test_num_batches, criterion)

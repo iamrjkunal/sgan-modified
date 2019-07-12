@@ -49,7 +49,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=35, hid_dim = 128 , n_layers =1, dropout = 0):
+    def __init__(self, input_dim=35, hid_dim = 64 , n_layers =1, dropout = 0):
         super(Encoder, self).__init__()
         
         self.input_dim = input_dim
@@ -74,7 +74,7 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, input_dim =34, output_dim =1, hid_dim =128, n_layers =1, dropout =0):
+    def __init__(self, input_dim =34, output_dim =1, hid_dim =64, n_layers =1, dropout =0):
         super(Decoder, self).__init__()
         
         self.input_dim = input_dim
@@ -129,16 +129,6 @@ model.apply(init_weights)
 optimizer = optim.Adam(model.parameters())
 
 criterion = nn.MSELoss(size_average=False)
-
-# class RMSELoss(nn.Module):
-#     def __init__(self):
-#         super().__init__()
-#         self.mse = nn.MSELoss(size_average=False)
-        
-#     def forward(self,yhat,y):
-#         return torch.sqrt(self.mse(yhat,y))
-# criterion = RMSELoss()
-
 
 
 def train(model,train_num_batches, optimizer, criterion, clip):
@@ -219,7 +209,7 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        checkout = 'sensor_lstm' + str(unfold_timestep) + 'ts.pt'
+        checkout = 'sensor_lstm_' + str(unfold_timestep) + 'ts.pt'
         torch.save(model.state_dict(), checkout)
     print("####Epoch:", epoch+1)
     print("Train Loss :", train_loss)

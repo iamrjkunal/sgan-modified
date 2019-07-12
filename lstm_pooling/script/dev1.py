@@ -23,11 +23,14 @@ oct_data = np.loadtxt("../dataset/lstminput.txt", delimiter='\t')
 # =============================================================================
 #k = random.sample(range(1, 34), 1)[0]
 k = 5
-sensor_list = random.sample(range(0, 34), k)
-sensor_list.sort()
-sensor_list.append(34)
-with open("sensor_list_dev1.txt", "w") as file:
-    file.write(str(sensor_list))
+# sensor_list = random.sample(range(0, 34), k)
+# sensor_list.sort()
+# sensor_list.append(34)
+# with open("sensor_list_dev1.txt", "w") as file:
+#     file.write(str(sensor_list))
+
+with open("sensor_list_dev1.txt", "r") as file:
+    sensor_list = eval(file.readline())
 unfold_timestep = 10
 def getbatch():
     unfold_timestep = 10
@@ -334,9 +337,10 @@ best_valid_loss = float('inf')
 train_num_batches = 1000
 valid_num_batches = 200
 test_num_batches = 400
-
+flag =0
 for epoch in range(N_EPOCHS):  
-      
+    if flag ==0:
+        break
     train_loss = train(model, train_num_batches, optimizer, criterion, CLIP)
     valid_loss = evaluate(model, valid_num_batches, criterion)    
     if valid_loss < best_valid_loss:
@@ -347,7 +351,7 @@ for epoch in range(N_EPOCHS):
     print("Train Loss :", train_loss)
     print("Val Loss:", valid_loss)
 
-model.load_state_dict(torch.load(checkout))
+model.load_state_dict(torch.load('sensor_lstm_10tspool1.pt'))
 best_test_loss = float('inf')
 for i in range(5):
     test_loss = evaluate(model, test_num_batches, criterion)
