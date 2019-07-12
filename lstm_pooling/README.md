@@ -50,11 +50,12 @@ python dev_final_train.py \
 Note:
 - num_sensors = no. of sensors you want to sample
 - sensor_no = for which sensor we want to predict 
-- need to change which sensor to run inside the code of train.py
 ```
 
 * testing model
 ```bash
-python test.py --model_path
+python dev_final_test.py \
+--num_sensors \
+--sensor_no
 ```
 
