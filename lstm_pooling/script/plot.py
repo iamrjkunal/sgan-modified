@@ -11,5 +11,5 @@ for i in range(0,35):
     pp.title(sensor)
     pp.plot(oct_data[:,i])
     pp.show()
-    print("Variance for sensor {} is {}" .format(i, np.std(oct_data[:,i])**2))
+    print("Variance for sensor {} is {}" .format(i, np.std(oct_data[:,i])))
 
